@@ -12,10 +12,11 @@ export default function Home() {
     return (
         <MainLayout>
 
-            {/* imaage en premier*/}
-            <div className="bg-gray-300 w-full h-[500px] flex items-center justify-center text-3xl font-bold">
-                Bannière ZEK Sport
-            </div>
+            {/* image en premier*/}
+            <div
+                className="w-full h-[500px] bg-cover bg-center"
+                style={{ backgroundImage: "url('/images/image1.png')" }}
+            ></div>
 
             {/* le truc homme femme enfant */}
             <div className="flex flex-col md:flex-row justify-between gap-6 p-6 bg-white">
