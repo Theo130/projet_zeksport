@@ -10,17 +10,18 @@ use Inertia\Inertia;
 
 class ProduitController extends Controller
 {
-
-
+    // Afficher un produit individuel
     public function show($id)
-{
-    $produit = Produit::findOrFail($id);
+    {
+        // Charger les relations pour avoir tout ce qu'il faut dans Detailproduit.jsx
+        $produit = Produit::with('categorie', 'souscategorie')->findOrFail($id);
 
-   return Inertia::render('Produits/Detailproduit', [
-    'produit' => $produit
-]);
-}
+        return Inertia::render('Produits/Detailproduit', [
+            'produit' => $produit
+        ]);
+    }
 
+    // Afficher tous les produits d'une catégorie/souscat
     public function index($categorie, $souscategorie)
     {
         // Trouver la catégorie correspondante
@@ -42,4 +43,3 @@ class ProduitController extends Controller
         ]);
     }
 }
-

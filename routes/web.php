@@ -4,21 +4,17 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\RechercheController;
+
+// pour afficher resultat qd je recherche un truc
+Route::get('/recherche/resultats', [RechercheController::class, 'resultats']);
+// pour quand je clique sur produit dans barre de recherche
+Route::get('/produits/detail/{id}', [ProduitController::class, 'show']);
 
 
 Route::get('/produit/{id}', [ProduitController::class, 'show']);
 Route::get('/produits/{categorie}/{souscategorie}', [ProduitController::class, 'index']);
-
-
-
-// Route::get('/test-db', function () {
-//     try {
-//         DB::connection()->getPdo();
-//         return 'Connexion réussie à la base de données: ' . DB::connection()->getDatabaseName();
-//     } catch (\Exception $e) {
-//         return 'Erreur de connexion : ' . $e->getMessage();
-//     }
-// });
+Route::get('/recherche', [RechercheController::class, 'index']);
 
 
 Route::get('/', function () {
