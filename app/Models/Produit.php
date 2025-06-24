@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Produit extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $table = 'produits';
 
@@ -20,13 +21,24 @@ class Produit extends Model
         'id_subcategorie',
     ];
 
-    // 🔗 Relation avec la sous-catégorie
+    // 🔍 Données à indexer dans Meilisearch
+    public function toSearchableArray()
+    {
+        $this->loadMissing('souscategorie.categorie');
+
+        return [
+            'nom' => $this->nom,
+            'description' => $this->description,
+            'categorie' => $this->categorie ? $this->categorie->nom : null,
+            'souscategorie' => $this->souscategorie ? $this->souscategorie->nom : null,
+        ];
+    }
+
     public function souscategorie()
     {
         return $this->belongsTo(Subcategorie::class, 'id_subcategorie');
     }
 
-    // 🔗 Relation avec la catégorie via la sous-catégorie
     public function categorie()
     {
         return $this->hasOneThrough(

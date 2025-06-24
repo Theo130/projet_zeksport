@@ -21,21 +21,17 @@ class RechercheController extends Controller
         return response()->json($resultats);
     }
 
-    // 🔍 Recherche complète avec "intelligence"
+    // 🔍 Recherche complète avec Meilisearch (intelligente)
     public function resultats(Request $request)
     {
-        $query = strtolower($request->input('q')); // mise en minuscule
+        $query = $request->input('q');
 
-        // On enlève les espaces de la recherche
-        $normalizedQuery = str_replace(' ', '', $query);
-
-        $produits = Produit::with('categorie', 'souscategorie')
-            ->whereRaw('LOWER(REPLACE(nom, "-", "")) LIKE ?', ['%' . $normalizedQuery . '%'])
-            ->get();
+        // ✅ Utilisation de Meilisearch via Laravel Scout
+        $produits = Produit::search($query)->get();
 
         return Inertia::render('Recherche/Resultats', [
             'produits' => $produits,
-            'query' => $request->input('q') // on garde la requête d'origine pour l'affichage
+            'query' => $query
         ]);
     }
 }

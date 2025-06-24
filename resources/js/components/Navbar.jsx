@@ -10,7 +10,6 @@ export default function Navbar() {
       setResultats([]);
       return;
     }
-
     try {
       const response = await fetch(`/recherche?q=${texte}`);
       const data = await response.json();
@@ -31,23 +30,23 @@ export default function Navbar() {
 
   return (
     <header className="w-full">
-      {/* Bandeau noir */}
-      <div className="bg-black text-white flex justify-between items-center px-8 py-2">
-        {/* Logo */}
+      {/* Bandeau noir très fin */}
+      <div className="bg-black text-white flex justify-between items-center px-8 py-1">
         <div>
-          <img src="/images/logo_zek_sport.png" alt="Logo" className="w-[120px] h-[120px]" />
+          <img
+            src="/images/logo_zek_sport.png"
+            alt="Logo"
+            className="w-[80px] h-[80px]"
+          />
         </div>
 
         {/* Section droite */}
         <div className="flex flex-col items-end gap-2">
-          {/* Lien de connexion */}
           <a href="/connexion" className="text-white text-sm hover:underline font-medium">
             S’identifier
           </a>
 
-          {/* Recherche + icônes */}
           <div className="flex items-center gap-2">
-            {/* Champ recherche avec résultats + redirection sur Entrée ou clic loupe */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -72,7 +71,6 @@ export default function Navbar() {
                 />
               </button>
 
-              {/* Résultats live */}
               {resultats.length > 0 && (
                 <div className="absolute top-full left-0 w-[300px] bg-white shadow-lg z-50 rounded-md mt-1 max-h-60 overflow-y-auto">
                   {resultats.map((produit) => (
@@ -89,7 +87,6 @@ export default function Navbar() {
               )}
             </form>
 
-            {/* Icônes profil & panier */}
             <a href="#" className="ml-1">
               <img src="/images/bonhomme.png" alt="profil" className="w-9 h-9" />
             </a>
