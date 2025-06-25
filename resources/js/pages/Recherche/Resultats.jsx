@@ -21,15 +21,16 @@ export default function Resultats({ produits, query }) {
                 key={produit.id}
                 className="bg-gray-200 rounded-lg shadow hover:shadow-lg transition duration-300 p-4"
               >
-                <Link
-                  href={`/produits/${produit.categorie}/${produit.souscategorie}/${produit.id}`}
-                  className="block mb-4"
-                >
-                  <div className="w-full h-56 bg-gray-300 rounded overflow-hidden">
+                <Link href={`/produit/${produit.id}`} className="block mb-4">
+                  <div className="w-full h-56 bg-gray-100 rounded overflow-hidden flex items-center justify-center group">
                     <img
-                      src={`/images/${produit.image_url}`}
+                      src={
+                        produit.image_url.includes('http')
+                          ? produit.image_url
+                          : `/images/${produit.image_url}`
+                      }
                       alt={produit.nom}
-                      className="w-full h-full object-cover"
+                      className="max-h-full max-w-full object-contain transition-transform duration-300 ease-in-out group-hover:scale-105"
                     />
                   </div>
 

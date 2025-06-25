@@ -21,10 +21,15 @@ export default function Detailproduit({ produit }) {
                     {/* Image */}
                     <div className="w-full md:w-1/2 bg-gray-100 rounded-lg overflow-hidden">
                         <img
-                            src={produit.image_url ? `/images/${produit.image_url}` : '/images/default.jpg'}
+                            src={
+                                produit.image_url?.includes('http')
+                                    ? produit.image_url
+                                    : `/images/${produit.image_url || 'default.jpg'}`
+                            }
                             alt={produit.nom}
                             className="w-full h-auto object-cover"
                         />
+
                     </div>
 
                     {/* Infos produit */}

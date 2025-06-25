@@ -1,4 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
+import React from 'react';
 
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
     const handleImageError = () => {

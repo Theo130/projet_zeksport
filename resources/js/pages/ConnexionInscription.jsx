@@ -1,5 +1,6 @@
 import React from 'react';
 import MainLayout from '../Layouts/MainLayout';
+import { Link } from '@inertiajs/react';
 
 export default function ConnexionInscription() {
   return (
@@ -32,18 +33,21 @@ export default function ConnexionInscription() {
             </div>
           </div>
 
-          
+
           <div className="w-full md:w-1/2 bg-white p-6 border rounded text-center">
             <h2 className="text-xl font-semibold mb-4 text-black">Nouveau client de ZEK Sport ?</h2>
-            <button className="w-full bg-emerald-400 text-white py-2 rounded font-semibold hover:bg-emerald-500 transition">
+            <Link
+              href="/inscription"
+              className="block w-full bg-emerald-400 text-white py-2 rounded font-semibold hover:bg-emerald-500 transition"
+            >
               S’enregistrer
-            </button>
+            </Link>
           </div>
         </div>
 
         <p className="text-sm text-center text-gray-700">
           Nous utilisons ces données en accord avec notre{" "}
-          <a href="#" className="underline hover:text-black">Politique de Confidentialité</a> 
+          <a href="#" className="underline hover:text-black">Politique de Confidentialité</a>
         </p>
       </div>
     </MainLayout>

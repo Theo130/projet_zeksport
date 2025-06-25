@@ -1,28 +1,18 @@
 import React from 'react';
-import { Head } from '@inertiajs/react';
-import { Link } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import MainLayout from "../../Layouts/MainLayout";
 
 export default function Index({ categorie, souscategorie, produits }) {
     return (
-
         <MainLayout>
-
-
             <div className="p-6 bg-white">
 
                 <Link
-                    href="/home"
+                    href="/"
                     className="inline-block mb-6 px-5 py-2 bg-emerald-400 text-white text-sm font-semibold rounded-md shadow hover:bg-black transition duration-300"
                 >
                     ← Retour à l'accueil
                 </Link>
-
-
-
-                {/* <h1 className="text-black text-xl font-bold">
-                    Produits - {categorie} / {souscategorie}
-                </h1> */}
 
                 <h1 className="text-3xl font-bold mb-8 capitalize text-black">
                     {categorie} / {souscategorie}
@@ -35,14 +25,17 @@ export default function Index({ categorie, souscategorie, produits }) {
                             className="bg-gray-200 rounded-lg shadow hover:shadow-lg transition duration-300 p-4"
                         >
                             <Link href={`/produit/${produit.id}`} className="block mb-4">
-                                <div className="w-full h-56 bg-gray-300 rounded overflow-hidden">
+                                <div className="w-full h-56 bg-gray-100 rounded overflow-hidden flex items-center justify-center group">
                                     <img
-                                        src={`/images/${produit.image_url}`}
+                                        src={
+                                            produit.image_url.startsWith('http')
+                                                ? produit.image_url
+                                                : `/images/${produit.image_url}`
+                                        }
                                         alt={produit.nom}
-                                        className="w-full h-full object-cover"
+                                        className="max-h-full max-w-full object-contain transition-transform duration-300 ease-in-out group-hover:scale-105"
                                     />
                                 </div>
-
                                 <h2 className="text-lg font-semibold text-black mt-3">{produit.nom}</h2>
                                 <p className="font-bold text-black">{produit.prix} €</p>
                             </Link>
@@ -54,8 +47,6 @@ export default function Index({ categorie, souscategorie, produits }) {
                     ))}
                 </div>
             </div>
-
         </MainLayout>
-
     );
 }
