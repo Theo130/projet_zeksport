@@ -4,7 +4,7 @@ import { Link, usePage } from '@inertiajs/react';
 
 export default function Navbar() {
   const { auth } = usePage().props;
-  const utilisateurConnecté = auth?.user !== null;
+  const utilisateurConnecté = !!auth?.user; // Vérifie si l'utilisateur est connecté
 
   const [recherche, setRecherche] = useState('');
   const [resultats, setResultats] = useState([]);
@@ -22,25 +22,32 @@ export default function Navbar() {
   useEffect(() => {
     rechercher(recherche);
     return () => rechercher.cancel();
-  }, [recherche, rechercher]);
+  }, [recherche]);
 
   const resetRecherche = () => {
     setRecherche('');
     setResultats([]);
   };
 
-  // ✅ Fonction de déconnexion (session uniquement)
   const handleLogout = async () => {
     try {
-      await fetch('/deconnexion', {
+      const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        ?.getAttribute('content');
+
+      const response = await fetch('/deconnexion', {
         method: 'POST',
         headers: {
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          'X-CSRF-TOKEN': csrfToken,
           'Content-Type': 'application/json',
         },
       });
 
-      window.location.href = '/'; // 🔁 Redirection après déconnexion
+      if (response.ok) {
+        window.location.href = '/';
+      } else {
+        console.error("Déconnexion échouée");
+      }
     } catch (error) {
       console.error("Erreur pendant la déconnexion", error);
     }
@@ -48,9 +55,7 @@ export default function Navbar() {
 
   return (
     <header className="w-full">
-      {/* Bandeau noir */}
       <div className="bg-black text-white flex justify-between items-center px-8 py-1">
-        {/* Logo cliquable */}
         <Link href="/">
           <img
             src="/images/logo_zek_sport.png"
@@ -59,7 +64,6 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Zone droite */}
         <div className="flex flex-col items-end gap-2">
           <div className="flex gap-4">
             {!utilisateurConnecté ? (
@@ -80,7 +84,6 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Formulaire de recherche */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -104,7 +107,6 @@ export default function Navbar() {
                 />
               </button>
 
-              {/* Autocomplete */}
               {resultats.length > 0 && (
                 <div className="absolute top-full left-0 w-72 bg-white shadow-lg z-50 rounded-md mt-1 max-h-60 overflow-y-auto">
                   {resultats.map((p) => (
@@ -121,7 +123,6 @@ export default function Navbar() {
               )}
             </form>
 
-            {/* Profil & Panier */}
             <a href="#" className="ml-1">
               <img src="/images/bonhomme.png" alt="profil" className="w-9 h-9" />
             </a>
@@ -132,7 +133,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Menu principal */}
       <nav className="bg-white flex justify-center gap-14 py-3 border-y border-gray-200">
         <button className="font-medium hover:text-gray-600">Homme</button>
         <button className="font-medium hover:text-gray-600">Femme</button>

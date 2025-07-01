@@ -8,16 +8,35 @@ use Illuminate\Support\Facades\Auth;
 
 class ConnexionController extends Controller
 {
-   public function logout(Request $request)
-{
-    Auth::logout();
+    public function login(Request $request)
+    {
+        // Validation des champs
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'mot_de_passe' => ['required'],
+        ]);
 
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+        // Tentative de connexion (Laravel attend 'password' ici !)
+        if (Auth::attempt([
+            'email' => $credentials['email'],
+            'password' => $credentials['mot_de_passe'], // ✅ correspond à getAuthPassword()
+        ])) {
+            $request->session()->regenerate();
+            return redirect()->intended('/');
+        }
 
-    // 🔴 On ne redirige PAS vers une route nommée
-    return response()->json(['message' => 'Déconnecté']);
+        // Échec de la connexion
+        return back()->withErrors([
+            'email' => 'Identifiants incorrects.',
+        ])->onlyInput('email');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json(['message' => 'Déconnecté']);
+    }
 }
-
-}
-

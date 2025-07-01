@@ -8,13 +8,23 @@ use App\Http\Controllers\RechercheController;
 use App\Http\Controllers\Auth\InscriptionController;
 use App\Http\Controllers\Auth\ConnexionController;
 
-Route::middleware('auth')->post('/deconnexion', [ConnexionController::class, 'logout'])->name('logout');
+
+
+
+
+Route::middleware('auth')->post('/deconnexion', [ConnexionController::class, 'logout']);
+
+
+
 
 
 // ⚠️ Place-le tout en haut de ton fichier
 Route::get('/connexioninscription', function () {
     return Inertia::render('Inscription');
 })->name('login');
+
+// pr ce connecter
+Route::post('/connexion', [ConnexionController::class, 'login']);
 
 // Pages accessibles aux invités (non connectés)
 Route::middleware('guest')->group(function () {

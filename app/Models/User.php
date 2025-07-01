@@ -37,8 +37,8 @@ class User extends Authenticatable
     ];
 
     /** ───────── Auth password field ─ */
-    public function getAuthPassword()
-    {
-        return $this->mot_de_passe;
-    }
+public function getAuthPassword()
+{
+    return $this->mot_de_passe;
+}
 }
