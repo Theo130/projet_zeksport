@@ -8,14 +8,12 @@ use Inertia\Middleware;
 class HandleInertiaRequests extends Middleware
 {
     /**
-     * The root template that is loaded on the first page visit.
-     *
-     * @var string
+     * L'attribut root view pour les requêtes Inertia (souvent app.blade.php)
      */
     protected $rootView = 'app';
 
     /**
-     * Determine the current asset version.
+     * Détermine si l'utilisateur actuel peut accéder à Inertia DevTools.
      */
     public function version(Request $request): ?string
     {
@@ -23,17 +21,28 @@ class HandleInertiaRequests extends Middleware
     }
 
     /**
-     * Define the props that are shared by default.
-     *
-     * @return array<string, mixed>
+     * Partage les props globales avec toutes les vues Inertia.
      */
     public function share(Request $request): array
     {
-        return [
-            ...parent::share($request),
+        return array_merge(parent::share($request), [
+
+            // ✅ Partage l'utilisateur connecté
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user() ? [
+                    'id'     => $request->user()->id,
+                    'nom'    => $request->user()->nom,
+                    'prenom' => $request->user()->prenom,
+                    'email'  => $request->user()->email,
+                    'role'   => $request->user()->role,
+                ] : null,
             ],
-        ];
+
+            // ✅ Tu peux aussi partager des flashs ici si besoin :
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+                'error'   => fn () => $request->session()->get('error'),
+            ],
+        ]);
     }
 }

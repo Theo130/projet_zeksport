@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import debounce from 'lodash.debounce';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
 export default function Navbar() {
+  const { auth } = usePage().props;
+  const utilisateurConnecté = auth?.user !== null;
+
   const [recherche, setRecherche] = useState('');
   const [resultats, setResultats] = useState([]);
 
@@ -26,6 +29,23 @@ export default function Navbar() {
     setResultats([]);
   };
 
+  // ✅ Fonction de déconnexion (session uniquement)
+  const handleLogout = async () => {
+    try {
+      await fetch('/deconnexion', {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          'Content-Type': 'application/json',
+        },
+      });
+
+      window.location.href = '/'; // 🔁 Redirection après déconnexion
+    } catch (error) {
+      console.error("Erreur pendant la déconnexion", error);
+    }
+  };
+
   return (
     <header className="w-full">
       {/* Bandeau noir */}
@@ -41,9 +61,23 @@ export default function Navbar() {
 
         {/* Zone droite */}
         <div className="flex flex-col items-end gap-2">
-          <Link href="/connexioninscription" className="text-sm hover:underline font-medium">
-            S’identifier
-          </Link>
+          <div className="flex gap-4">
+            {!utilisateurConnecté ? (
+              <Link
+                href="/connexioninscription"
+                className="text-sm hover:underline font-medium"
+              >
+                S’identifier
+              </Link>
+            ) : (
+              <button
+                onClick={handleLogout}
+                className="text-sm text-red-500 hover:underline font-medium"
+              >
+                Se déconnecter
+              </button>
+            )}
+          </div>
 
           <div className="flex items-center gap-2">
             {/* Formulaire de recherche */}
