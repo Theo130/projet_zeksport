@@ -27,7 +27,7 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
 
-            // ✅ Partage l'utilisateur connecté
+            // ✅ Partage l'utilisateur connecté avec plus d'infos
             'auth' => [
                 'user' => $request->user() ? [
                     'id'     => $request->user()->id,
@@ -35,14 +35,26 @@ class HandleInertiaRequests extends Middleware
                     'prenom' => $request->user()->prenom,
                     'email'  => $request->user()->email,
                     'role'   => $request->user()->role,
+                    'telephone' => $request->user()->telephone, // AJOUTÉ
+                    'nom_complet' => $request->user()->prenom . ' ' . $request->user()->nom, // AJOUTÉ
+                    'is_admin' => $request->user()->role === 'admin', // AJOUTÉ
                 ] : null,
             ],
 
-            // ✅ Tu peux aussi partager des flashs ici si besoin :
+            // ✅ AMÉLIORÉ : Messages flash avec gestion des erreurs de validation
             'flash' => [
-                'success' => fn () => $request->session()->get('success'),
-                'error'   => fn () => $request->session()->get('error'),
+                'success' => $request->session()->get('success'),
+                'error'   => $request->session()->get('error'),
+                'info'    => $request->session()->get('info'),
+                'warning' => $request->session()->get('warning'),
             ],
+            
+            // ✅ AJOUTÉ : Erreurs de validation (pour les formulaires)
+            'errors' => function () use ($request) {
+                return $request->session()->get('errors') 
+                    ? $request->session()->get('errors')->getBag('default')->getMessages()
+                    : (object) [];
+            },
         ]);
     }
 }

@@ -19,7 +19,7 @@ class InscriptionController extends Controller
             'nom'          => ['required', 'string', 'max:191'],
             'email'        => ['required', 'email', 'max:191', 'unique:utilisateurs,email'],
             'telephone'    => ['nullable', 'string', 'max:191'],
-            'role'         => ['in:admin,client'],
+            'role'         => ['nullable', 'in:admin,client'], // CHANGÉ : nullable
             'mot_de_passe' => ['required', 'confirmed', Password::min(8)->numbers()],
         ]);
 
@@ -29,17 +29,14 @@ class InscriptionController extends Controller
             'nom'          => $validated['nom'],
             'email'        => $validated['email'],
             'telephone'    => $validated['telephone'] ?? null,
-            'role'         => $validated['role'],
+            'role'         => $validated['role'] ?? 'client', // CHANGÉ : défaut à 'client'
             'mot_de_passe' => Hash::make($validated['mot_de_passe']),
         ]);
 
-        /* -------- Connexion -------- */
+        /* -------- Connexion automatique -------- */
         Auth::login($user);
 
-        /* -------- Redirection --------
-           ⚠  Si tu gardes le middleware "verified" sur /dashboard,
-           l’utilisateur NON vérifié sera tout de suite renvoyé vers /email/verify.
-           Trois solutions :                       */
-        return redirect()->intended(route('dashboard'));
+        /* -------- Redirection avec message de succès -------- */
+        return redirect()->route('dashboard')->with('success', 'Compte créé avec succès ! Bienvenue sur ZEK Sport.');
     }
 }

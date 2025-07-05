@@ -16,9 +16,11 @@ class User extends Authenticatable
     protected $keyType    = 'int';
 
     /** ───────── Timestamps ─────────── */
-    public $timestamps = true;
-    const CREATED_AT = 'date_creation';
-    const UPDATED_AT = null;                 // pas de updated_at
+    public $timestamps = false;              // CHANGÉ : désactive complètement les timestamps automatiques
+    // Ou si tu veux garder seulement created_at :
+    // public $timestamps = true;
+    // const CREATED_AT = 'date_creation';
+    // const UPDATED_AT = null;
 
     /** ───────── Remplissage ────────── */
     protected $fillable = [
@@ -36,9 +38,39 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /** ───────── Auth password field ─ */
-public function getAuthPassword()
-{
-    return $this->mot_de_passe;
-}
+    /** ───────── Méthodes d'authentification Laravel ─────────── */
+    
+    /**
+     * AJOUTÉ : Indique à Laravel le nom du champ password dans la DB
+     */
+    public function getAuthPasswordName()
+    {
+        return 'mot_de_passe';
+    }
+    
+    /**
+     * Retourne le mot de passe pour l'authentification
+     */
+    public function getAuthPassword()
+    {
+        return $this->mot_de_passe;
+    }
+
+    /** ───────── Accesseurs optionnels ─────────── */
+    
+    /**
+     * AJOUTÉ : Accesseur pour avoir le nom complet
+     */
+    public function getNomCompletAttribute()
+    {
+        return $this->prenom . ' ' . $this->nom;
+    }
+    
+    /**
+     * AJOUTÉ : Vérifier si l'utilisateur est admin
+     */
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 }

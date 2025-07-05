@@ -22,12 +22,15 @@ class ConnexionController extends Controller
             'password' => $credentials['mot_de_passe'], // ✅ correspond à getAuthPassword()
         ])) {
             $request->session()->regenerate();
-            return redirect()->intended('/');
+            
+            // AMÉLIORÉ : Message de succès et redirection intelligente
+            return redirect()->intended(route('dashboard'))
+                ->with('success', 'Connexion réussie ! Bon retour sur ZEK Sport.');
         }
 
-        // Échec de la connexion
+        // AMÉLIORÉ : Gestion d'erreur plus claire
         return back()->withErrors([
-            'email' => 'Identifiants incorrects.',
+            'email' => 'Ces identifiants ne correspondent à aucun compte.',
         ])->onlyInput('email');
     }
 
@@ -37,6 +40,8 @@ class ConnexionController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return response()->json(['message' => 'Déconnecté']);
+        // AMÉLIORÉ : Redirection vers l'accueil avec message
+        return redirect()->route('home')
+            ->with('success', 'Vous avez été déconnecté(e) avec succès.');
     }
 }
