@@ -2,27 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasFactory, Notifiable;
 
-    /** ───────── Table & clés ───────── */
-    protected $table      = 'utilisateurs';   // <- ta table MySQL
-    protected $primaryKey = 'id';
-    public    $incrementing = true;
-    protected $keyType    = 'int';
+    /**
+     * Le nom de la table dans la base de données
+     */
+    protected $table = 'utilisateurs';
 
-    /** ───────── Timestamps ─────────── */
-    public $timestamps = false;              // CHANGÉ : désactive complètement les timestamps automatiques
-    // Ou si tu veux garder seulement created_at :
-    // public $timestamps = true;
-    // const CREATED_AT = 'date_creation';
-    // const UPDATED_AT = null;
-
-    /** ───────── Remplissage ────────── */
+    /**
+     * Les attributs qui sont assignables en masse.
+     */
     protected $fillable = [
         'nom',
         'prenom',
@@ -32,45 +27,65 @@ class User extends Authenticatable
         'mot_de_passe',
     ];
 
-    /** ───────── JSON hidden ────────── */
+    /**
+     * Les attributs qui doivent être cachés pour la sérialisation.
+     */
     protected $hidden = [
         'mot_de_passe',
         'remember_token',
     ];
 
-    /** ───────── Méthodes d'authentification Laravel ─────────── */
-    
     /**
-     * AJOUTÉ : Indique à Laravel le nom du champ password dans la DB
+     * Les attributs qui doivent être castés.
      */
-    public function getAuthPasswordName()
-    {
-        return 'mot_de_passe';
-    }
-    
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'date_creation' => 'datetime',
+    ];
+
     /**
-     * Retourne le mot de passe pour l'authentification
+     * Le nom de la colonne de mot de passe
      */
     public function getAuthPassword()
     {
         return $this->mot_de_passe;
     }
 
-    /** ───────── Accesseurs optionnels ─────────── */
-    
     /**
-     * AJOUTÉ : Accesseur pour avoir le nom complet
+     * Mutateur pour hasher automatiquement le mot de passe
      */
-    public function getNomCompletAttribute()
+    public function setMotDePasseAttribute($value)
     {
-        return $this->prenom . ' ' . $this->nom;
+        $this->attributes['mot_de_passe'] = bcrypt($value);
     }
-    
+
     /**
-     * AJOUTÉ : Vérifier si l'utilisateur est admin
+     * Vérifier si l'utilisateur est admin
      */
     public function isAdmin()
     {
         return $this->role === 'admin';
     }
+
+    /**
+     * Vérifier si l'utilisateur est client
+     */
+    public function isClient()
+    {
+        return $this->role === 'client';
+    }
+
+    /**
+     * Nom complet de l'utilisateur
+     */
+    public function getNomCompletAttribute()
+    {
+        return $this->prenom . ' ' . $this->nom;
+    }
+
+    /**
+     * Définir les timestamps personnalisés
+     */
+    const CREATED_AT = 'date_creation';
+    const UPDATED_AT = null; // Si tu n'as pas de colonne updated_at
 }

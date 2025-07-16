@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import debounce from 'lodash.debounce';
-import { Link, usePage } from '@inertiajs/react';
+import { Link, usePage, router } from '@inertiajs/react';
 
 export default function Navbar() {
   const { auth } = usePage().props;
@@ -29,28 +29,9 @@ export default function Navbar() {
     setResultats([]);
   };
 
-  const handleLogout = async () => {
-    try {
-      const csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        ?.getAttribute('content');
-
-      const response = await fetch('/deconnexion', {
-        method: 'POST',
-        headers: {
-          'X-CSRF-TOKEN': csrfToken,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        window.location.href = '/';
-      } else {
-        console.error("Déconnexion échouée");
-      }
-    } catch (error) {
-      console.error("Erreur pendant la déconnexion", error);
-    }
+  const handleLogout = (e) => {
+    e.preventDefault();
+    router.post(route('deconnexion'));
   };
 
   return (
@@ -68,10 +49,10 @@ export default function Navbar() {
           <div className="flex gap-4">
             {!utilisateurConnecté ? (
               <Link
-                href="/connexioninscription"
+                href={route('connexion')}
                 className="text-sm hover:underline font-medium"
               >
-                S’identifier
+                S'identifier
               </Link>
             ) : (
               <button
