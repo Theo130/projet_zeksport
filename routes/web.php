@@ -29,9 +29,6 @@ Route::get('/panier', function () {
     return Inertia::render('Panier');
 })->name('panier.jsx');
 
-// ===============================================
-// ROUTES D'AUTHENTIFICATION (nouvelles + corrections)
-// ===============================================
 
 // Routes d'authentification
 Route::middleware('guest')->group(function () {
@@ -64,9 +61,32 @@ Route::middleware('auth')->group(function () {
     Route::post('/deconnexion', [AuthController::class, 'deconnexion'])->name('deconnexion');
     
     // Dashboard
-    Route::get('/dashboard', function () {
+    Route::get('/mon-compte', function () {
         return Inertia::render('Dashboard', [
             'user' => auth()->user()
         ]);
     })->name('dashboard');
+});
+
+use App\Http\Controllers\PanierController;
+
+// Routes panier pour utilisateurs connectés
+Route::middleware('auth')->group(function () {
+    // Afficher le panier
+    Route::get('/panier', [PanierController::class, 'index'])->name('panier.index');
+    
+    // Ajouter un produit au panier
+    Route::post('/panier/ajouter', [PanierController::class, 'ajouter'])->name('panier.ajouter');
+    
+    // Supprimer un produit du panier
+    Route::delete('/panier/supprimer', [PanierController::class, 'supprimer'])->name('panier.supprimer');
+    
+    // Modifier la quantité d'un produit
+    Route::patch('/panier/quantite', [PanierController::class, 'modifierQuantite'])->name('panier.quantite');
+    
+    // Vider le panier
+    Route::delete('/panier/vider', [PanierController::class, 'vider'])->name('panier.vider');
+    
+    // API pour obtenir le nombre d'articles (pour la navbar)
+    Route::get('/api/panier/nombre', [PanierController::class, 'nombreArticles'])->name('panier.nombre');
 });

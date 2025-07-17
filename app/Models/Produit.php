@@ -50,4 +50,44 @@ class Produit extends Model
             'id_categorie'     // Local key on Subcategorie table...
         );
     }
+
+    // ===== RELATIONS POUR LE PANIER (CORRIGÉES) =====
+
+    /**
+     * Relation many-to-many avec les paniers (CORRIGÉE)
+     */
+    public function paniers()
+    {
+        return $this->belongsToMany(Panier::class, 'panier_produit', 'id_produit', 'id_panier')
+                    ->withPivot('quantite');
+                    // Retiré ->withTimestamps() car la table n'a pas ces colonnes
+    }
+
+    /**
+     * Vérifier si le produit est en stock
+     */
+    public function estEnStock($quantite = 1)
+    {
+        return $this->stock >= $quantite;
+    }
+
+    /**
+     * Réduire le stock
+     */
+    public function reduireStock($quantite)
+    {
+        if ($this->estEnStock($quantite)) {
+            $this->decrement('stock', $quantite);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Augmenter le stock
+     */
+    public function augmenterStock($quantite)
+    {
+        $this->increment('stock', $quantite);
+    }
 }
