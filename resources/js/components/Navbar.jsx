@@ -104,9 +104,10 @@ export default function Navbar() {
               )}
             </form>
 
-            <a href="#" className="ml-1">
+            <Link href="/mon-compte" className="ml-1">
               <img src="/images/bonhomme.png" alt="profil" className="w-9 h-9" />
-            </a>
+            </Link>
+            
             <Link href="/panier" className="ml-1">
               <img src="/images/panier.png" alt="panier" className="w-9 h-9" />
             </Link>

@@ -83,6 +83,24 @@ class User extends Authenticatable
         return $this->prenom . ' ' . $this->nom;
     }
 
+    // ===== NOUVELLES RELATIONS POUR LE PANIER =====
+
+    /**
+     * Relation avec le panier
+     */
+    public function panier()
+    {
+        return $this->hasOne(Panier::class, 'id_utilisateur');
+    }
+
+    /**
+     * Obtenir ou créer le panier de l'utilisateur
+     */
+    public function obtenirPanier()
+    {
+        return $this->panier()->firstOrCreate(['id_utilisateur' => $this->id]);
+    }
+
     /**
      * Définir les timestamps personnalisés
      */

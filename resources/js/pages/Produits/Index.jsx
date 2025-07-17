@@ -1,8 +1,33 @@
 import React from 'react';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import MainLayout from "../../Layouts/MainLayout";
 
 export default function Index({ categorie, souscategorie, produits }) {
+    const { auth } = usePage().props;
+    const utilisateurConnecte = !!auth?.user;
+
+    const ajouterAuPanier = (produitId) => {
+        if (!utilisateurConnecte) {
+            // Rediriger vers la connexion si pas connecté
+            router.visit(route('connexion'));
+            return;
+        }
+
+        router.post(route('panier.ajouter'), {
+            produit_id: produitId,
+            quantite: 1
+        }, {
+            preserveState: true,
+            preserveScroll: true,
+            onSuccess: () => {
+                // Optionnel : vous pouvez ajouter une notification de succès ici
+            },
+            onError: (errors) => {
+                console.error('Erreur lors de l\'ajout au panier:', errors);
+            }
+        });
+    };
+
     return (
         <MainLayout>
             <div className="p-6 bg-white">
@@ -40,8 +65,30 @@ export default function Index({ categorie, souscategorie, produits }) {
                                 <p className="font-bold text-black">{produit.prix} €</p>
                             </Link>
 
-                            <button className="w-full bg-emerald-400 text-white text-sm font-semibold px-4 py-2 rounded-md shadow hover:bg-black transition duration-300">
-                                Ajouter au panier
+                            {/* Informations sur le stock */}
+                            <div className="mb-2">
+                                {produit.stock > 0 ? (
+                                    <p className="text-sm text-green-600">
+                                        En stock ({produit.stock} disponible{produit.stock > 1 ? 's' : ''})
+                                    </p>
+                                ) : (
+                                    <p className="text-sm text-red-600">Rupture de stock</p>
+                                )}
+                            </div>
+
+                            <button 
+                                onClick={() => ajouterAuPanier(produit.id)}
+                                disabled={produit.stock === 0}
+                                className={`w-full text-sm font-semibold px-4 py-2 rounded-md shadow transition duration-300 ${
+                                    produit.stock > 0 
+                                        ? 'bg-emerald-400 text-white hover:bg-black' 
+                                        : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                                }`}
+                            >
+                                {utilisateurConnecte ? 
+                                    (produit.stock > 0 ? 'Ajouter au panier' : 'Indisponible') 
+                                    : 'Se connecter pour acheter'
+                                }
                             </button>
                         </div>
                     ))}
