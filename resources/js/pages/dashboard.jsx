@@ -237,18 +237,40 @@ export default function Dashboard() {
                 </div>
               </a>
 
-              <a
-                href="/"
-                className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
-              >
-                <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mr-3">
-                  🛍️
-                </div>
-                <div>
-                  <p className="font-medium">Continuer les achats</p>
-                  <p className="text-sm text-gray-500">Découvrir nos produits</p>
-                </div>
-              </a>
+              
+
+{user?.role === 'admin' ? (
+  <button
+    onClick={() => {
+      console.log('Clic sur admin button'); // Pour déboguer
+      router.get('/admin'); // Utilisez .get() au lieu de .visit()
+    }}
+    className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-red-50 transition text-left w-full"
+  >
+    <div className="w-10 h-10 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mr-3">
+      ⚙️
+    </div>
+    <div>
+      <p className="font-medium">Administration</p>
+      <p className="text-sm text-gray-500">Gérer la plateforme</p>
+    </div>
+  </button>
+) : (
+  <a
+                  href="/"
+                  className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+                >
+                  <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mr-3">
+                    🛍️
+                  </div>
+                  <div>
+                    <p className="font-medium">Continuer les achats</p>
+                    <p className="text-sm text-gray-500">Découvrir nos produits</p>
+                  </div>
+                </a>
+)}
+                
+           
 
               <button
                 onClick={handleLogout}

@@ -53,9 +53,11 @@ export default function Index({ categorie, souscategorie, produits }) {
                                 <div className="w-full h-56 bg-gray-100 rounded overflow-hidden flex items-center justify-center group">
                                     <img
                                         src={
-                                            produit.image_url.startsWith('http')
+                                            produit.image_url && produit.image_url.startsWith('http')
                                                 ? produit.image_url
-                                                : `/images/${produit.image_url}`
+                                                : produit.image_url 
+                                                    ? `/images/${produit.image_url}`
+                                                    : '/images/placeholder.jpg' // Image par défaut
                                         }
                                         alt={produit.nom}
                                         className="max-h-full max-w-full object-contain transition-transform duration-300 ease-in-out group-hover:scale-105"

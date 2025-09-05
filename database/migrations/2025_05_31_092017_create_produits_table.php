@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('stock');
             $table->string('image_url')->nullable();
             $table->foreignId('id_categorie')->constrained('categories');
+            $table->timestamps(); // ← AJOUTEZ CETTE LIGNE
         });
     }
 

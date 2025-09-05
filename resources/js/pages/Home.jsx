@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import MainLayout from '../Layouts/MainLayout';
 
 const Button = ({ label }) => (
@@ -8,11 +8,34 @@ const Button = ({ label }) => (
     </button>
 );
 
-export default function Home() {
+export default function Home({ produitsRecents = [] }) {
+    const { auth } = usePage().props;
+    const utilisateurConnecte = !!auth?.user;
+
+    const ajouterAuPanier = (produitId) => {
+        if (!utilisateurConnecte) {
+            router.visit(route('connexion'));
+            return;
+        }
+
+        router.post(route('panier.ajouter'), {
+            produit_id: produitId,
+            quantite: 1
+        }, {
+            preserveState: true,
+            preserveScroll: true,
+            onSuccess: () => {
+                // Notification de succès optionnelle
+            },
+            onError: (errors) => {
+                console.error('Erreur lors de l\'ajout au panier:', errors);
+            }
+        });
+    };
+
     return (
         <MainLayout>
-
-            {/* image en premier*/}
+            {/* image en premier */}
             <div
                 className="w-full h-[500px] bg-cover bg-center"
                 style={{ backgroundImage: "url('/images/image1.png')" }}
@@ -66,46 +89,77 @@ export default function Home() {
                 </div>
             </div>
 
-
-
-
-            {/* les produit en bas*/}
-            <div className="bg-white px-4 py-8">
-                <h1 className="text-black font-bold font-[Arial] -mt-2 ml-2">
-                    Nouveauté
-                </h1>
-                <div className="flex gap-4 overflow-x-auto scrollbar-hide">
-                    <div className="min-w-[250px] h-[150px] bg-gray-200 rounded-md flex items-center justify-center">
-
-                    </div>
-                    <div className="min-w-[250px] h-[150px] bg-gray-200 rounded-md flex items-center justify-center">
-
-                    </div>
-                    <div className="min-w-[250px] h-[150px] bg-gray-200 rounded-md flex items-center justify-center">
-
-                    </div>
-                    <div className="min-w-[250px] h-[150px] bg-gray-200 rounded-md flex items-center justify-center">
-
-                    </div>
-                    <div className="min-w-[250px] h-[150px] bg-gray-200 rounded-md flex items-center justify-center">
-
-                    </div>
-                    <div className="min-w-[250px] h-[150px] bg-gray-200 rounded-md flex items-center justify-center">
-
-                    </div>
-                    <div className="min-w-[250px] h-[150px] bg-gray-200 rounded-md flex items-center justify-center">
-
-                    </div>
-                    <div className="min-w-[250px] h-[150px] bg-gray-200 rounded-md flex items-center justify-center">
-
-                    </div>
-                    <div className="min-w-[250px] h-[150px] bg-gray-200 rounded-md flex items-center justify-center">
-
-                    </div>
+            {/* Section des produits récents */}
+            <div className="bg-white px-6 py-8">
+                <div className="flex justify-between items-center mb-6">
+                    <h1 className="text-2xl text-black font-bold">
+                        Meilleures ventes
+                    </h1>
+                   
+                
                 </div>
+
+                {/* Grille des produits */}
+                {produitsRecents.length > 0 ? (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        {produitsRecents.map((produit) => (
+                            <div
+                                key={produit.id}
+                                className="bg-gray-100 rounded-lg shadow hover:shadow-lg transition duration-300 p-4"
+                            >
+                                <Link href={`/produit/${produit.id}`} className="block mb-4">
+                                    <div className="w-full h-48 bg-gray-200 rounded overflow-hidden flex items-center justify-center group">
+                                        <img
+                                            src={
+                                                produit.image_url && produit.image_url.startsWith('http')
+                                                    ? produit.image_url
+                                                    : produit.image_url 
+                                                        ? `/images/${produit.image_url}`
+                                                        : '/images/placeholder.jpg'
+                                            }
+                                            alt={produit.nom}
+                                            className="max-h-full max-w-full object-contain transition-transform duration-300 ease-in-out group-hover:scale-105"
+                                        />
+                                    </div>
+                                    <h3 className="text-lg font-semibold text-black mt-3 line-clamp-2">{produit.nom}</h3>
+                                    <p className="font-bold text-emerald-600 text-lg">{produit.prix} €</p>
+                                </Link>
+
+
+                                 {/* Informations sur le stock */}
+                            <div className="mb-2">
+                                {produit.stock > 0 ? (
+                                    <p className="text-sm text-green-600">
+                                        En stock ({produit.stock} disponible{produit.stock > 1 ? 's' : ''})
+                                    </p>
+                                ) : (
+                                    <p className="text-sm text-red-600">Rupture de stock</p>
+                                )}
+                            </div>
+
+                                <button 
+                                    onClick={() => ajouterAuPanier(produit.id)}
+                                    disabled={produit.stock === 0}
+                                    className={`w-full text-sm font-semibold px-4 py-2 rounded-md shadow transition duration-300 ${
+                                        produit.stock > 0 
+                                            ? 'bg-emerald-400 text-white hover:bg-black' 
+                                            : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                                    }`}
+                                >
+                                    {utilisateurConnecte ? 
+                                        (produit.stock > 0 ? 'Ajouter au panier' : 'Indisponible') 
+                                        : 'Se connecter pour acheter'
+                                    }
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-12">
+                        <p className="text-gray-500 text-lg">Aucun produit récent à afficher pour le moment.</p>
+                    </div>
+                )}
             </div>
-
-
         </MainLayout>
     );
 }
