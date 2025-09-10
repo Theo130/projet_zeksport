@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -14,6 +15,11 @@ class User extends Authenticatable
      * Le nom de la table dans la base de données
      */
     protected $table = 'utilisateurs';
+
+    /**
+     * Désactiver les timestamps automatiques car on a seulement date_creation
+     */
+    public $timestamps = false;
 
     /**
      * Les attributs qui sont assignables en masse.
@@ -32,19 +38,17 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'mot_de_passe',
-        'remember_token',
     ];
 
     /**
      * Les attributs qui doivent être castés.
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'date_creation' => 'datetime',
     ];
 
     /**
-     * Le nom de la colonne de mot de passe
+     * Le nom de la colonne de mot de passe pour l'authentification
      */
     public function getAuthPassword()
     {
@@ -52,11 +56,19 @@ class User extends Authenticatable
     }
 
     /**
+     * Retourner le nom de la colonne du mot de passe
+     */
+    public function getAuthPasswordName()
+    {
+        return 'mot_de_passe';
+    }
+
+    /**
      * Mutateur pour hasher automatiquement le mot de passe
      */
     public function setMotDePasseAttribute($value)
     {
-        $this->attributes['mot_de_passe'] = bcrypt($value);
+        $this->attributes['mot_de_passe'] = Hash::make($value);
     }
 
     /**
@@ -83,8 +95,6 @@ class User extends Authenticatable
         return $this->prenom . ' ' . $this->nom;
     }
 
-    // ===== NOUVELLES RELATIONS POUR LE PANIER =====
-
     /**
      * Relation avec le panier
      */
@@ -100,10 +110,4 @@ class User extends Authenticatable
     {
         return $this->panier()->firstOrCreate(['id_utilisateur' => $this->id]);
     }
-
-    /**
-     * Définir les timestamps personnalisés
-     */
-    const CREATED_AT = 'date_creation';
-    const UPDATED_AT = null; // Si tu n'as pas de colonne updated_at
 }

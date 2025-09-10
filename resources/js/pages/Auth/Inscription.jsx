@@ -8,7 +8,7 @@ export default function Inscription() {
     nom: '',
     email: '',
     telephone: '',
-    role: 'client',
+    role: 'client', // Valeur par défaut
     mot_de_passe: '',
     mot_de_passe_confirmation: '',
   });
@@ -106,6 +106,13 @@ export default function Inscription() {
             />
             {errors.telephone && <p className="text-sm text-red-500 mt-1">{errors.telephone}</p>}
           </div>
+
+          {/* ----- AJOUT : Champ Role (caché mais envoyé) ----- */}
+          <input
+            type="hidden"
+            name="role"
+            value={data.role}
+          />
          
           <div>
             <label className="block font-medium mb-2 text-gray-700">Mot de passe *</label>

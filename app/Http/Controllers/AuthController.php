@@ -38,7 +38,7 @@ class AuthController extends Controller
             'nom' => ['required', 'string', 'max:50'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:utilisateurs,email'],
             'telephone' => ['nullable', 'string', 'max:20'],
-            'role' => ['required', 'in:client,admin'],
+            'role' => ['sometimes', 'in:client,admin'], // sometimes car pas toujours envoyé
             'mot_de_passe' => [
                 'required', 
                 'confirmed', 
@@ -54,7 +54,6 @@ class AuthController extends Controller
             'email.required' => 'L\'adresse e-mail est obligatoire.',
             'email.email' => 'L\'adresse e-mail doit être valide.',
             'email.unique' => 'Cette adresse e-mail est déjà utilisée.',
-            'role.required' => 'Le rôle est obligatoire.',
             'role.in' => 'Le rôle doit être client ou admin.',
             'mot_de_passe.required' => 'Le mot de passe est obligatoire.',
             'mot_de_passe.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
@@ -67,8 +66,8 @@ class AuthController extends Controller
                 'prenom' => $validated['prenom'],
                 'nom' => $validated['nom'],
                 'email' => $validated['email'],
-                'telephone' => $validated['telephone'],
-                'role' => $validated['role'],
+                'telephone' => $validated['telephone'] ?? null,
+                'role' => $validated['role'] ?? 'client', // Par défaut client
                 'mot_de_passe' => $validated['mot_de_passe'], // sera hashé automatiquement
             ]);
 
@@ -87,7 +86,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Traiter la connexion
+     * Traiter la connexion - CORRECTION PRINCIPALE
      */
     public function connexion(Request $request)
     {
@@ -101,19 +100,18 @@ class AuthController extends Controller
             'mot_de_passe.required' => 'Le mot de passe est obligatoire.',
         ]);
 
-        // Tentative de connexion
+        // CORRECTION : Recherche manuelle de l'utilisateur
         $user = User::where('email', $validated['email'])->first();
 
+        // Vérifier si l'utilisateur existe et si le mot de passe est correct
         if ($user && Hash::check($validated['mot_de_passe'], $user->mot_de_passe)) {
             // Connexion réussie
-            Auth::login($user, $request->boolean('remember'));
-            
+            Auth::login($user);
             $request->session()->regenerate();
 
             // Rediriger vers la page prévue ou dashboard
-            $intended = redirect()->intended(route('dashboard'));
-            
-            return $intended->with('success', 'Connexion réussie ! Bienvenue sur ZEK Sport.');
+            return redirect()->intended(route('dashboard'))
+                ->with('success', 'Connexion réussie ! Bienvenue sur ZEK Sport.');
         }
 
         // Échec de la connexion
@@ -132,7 +130,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // CORRECTION : Utiliser le nom de route correct 'home.jsx' au lieu de 'accueil'
-        return redirect()->route('home.jsx')->with('success', 'Déconnexion réussie.');
+        // Redirection vers l'accueil
+        return redirect()->route('home')->with('success', 'Déconnexion réussie.');
     }
 }
