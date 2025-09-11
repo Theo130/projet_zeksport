@@ -4,13 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
+// use Laravel\Scout\Searchable; // ← COMMENTÉ pour désactiver Meilisearch
 
 class Produit extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory; // ← Retirer Searchable
+    // use Searchable; // ← COMMENTÉ
 
     protected $table = 'produits';
+    
+    // Désactiver les timestamps car votre table n'en a pas
+    public $timestamps = false;
 
     protected $fillable = [
         'nom',
@@ -18,49 +22,50 @@ class Produit extends Model
         'prix',
         'stock',
         'image_url',
-        'id_subcategorie',
+        'id_categorie',
+        'id_subcategorie', // Ajouter cette ligne car elle existe dans votre table
     ];
 
-    // 🔍 Données à indexer dans Meilisearch
+    protected $casts = [
+        'prix' => 'decimal:2',
+        'stock' => 'integer',
+    ];
+
+    // Commenter temporairement toute la fonction Meilisearch
+    /*
     public function toSearchableArray()
     {
-        $this->loadMissing('souscategorie.categorie');
+        $this->loadMissing(['categorie', 'subcategorie']);
 
         return [
             'nom' => $this->nom,
             'description' => $this->description,
             'categorie' => $this->categorie ? $this->categorie->nom : null,
-            'souscategorie' => $this->souscategorie ? $this->souscategorie->nom : null,
+            'subcategorie' => $this->subcategorie ? $this->subcategorie->nom : null,
         ];
     }
+    */
 
-    public function souscategorie()
+    // Relations avec les catégories
+    public function categorie()
+    {
+        return $this->belongsTo(Categorie::class, 'id_categorie');
+    }
+
+    public function subcategorie()
     {
         return $this->belongsTo(Subcategorie::class, 'id_subcategorie');
     }
 
-    public function categorie()
-    {
-        return $this->hasOneThrough(
-            Categorie::class,
-            Subcategorie::class,
-            'id',              // Foreign key on Subcategorie table...
-            'id',              // Foreign key on Categorie table...
-            'id_subcategorie', // Local key on Produit table...
-            'id_categorie'     // Local key on Subcategorie table...
-        );
-    }
-
-    // ===== RELATIONS POUR LE PANIER (CORRIGÉES) =====
+    // ===== RELATIONS POUR LE PANIER =====
 
     /**
-     * Relation many-to-many avec les paniers (CORRIGÉE)
+     * Relation many-to-many avec les paniers
      */
     public function paniers()
     {
         return $this->belongsToMany(Panier::class, 'panier_produit', 'id_produit', 'id_panier')
                     ->withPivot('quantite');
-                    // Retiré ->withTimestamps() car la table n'a pas ces colonnes
     }
 
     /**

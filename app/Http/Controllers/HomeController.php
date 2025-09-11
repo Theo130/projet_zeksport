@@ -14,7 +14,7 @@ class HomeController extends Controller
     public function index()
     {
         // Récupérer les produits mis en avant pour "Meilleures ventes"
-        $produitsRecents = Produit::with('categorie', 'souscategorie')
+        $produitsRecents = Produit::with('categorie', 'subcategorie')
             ->where('mise_en_avant', true) // Seulement les produits mis en avant
             ->orderBy('id', 'desc')
             ->take(8)

@@ -8,11 +8,9 @@ use App\Http\Controllers\RechercheController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PanierController;
-use App\Http\Controllers\AdminController; // 👈 AJOUTE CET IMPORT ICI
+use App\Http\Controllers\AdminController; 
 
-// ===============================================
-// ROUTES EXISTANTES
-// ===============================================
+
 
 // Afficher resultat qd je recherche un truc
 Route::get('/recherche/resultats', [RechercheController::class, 'resultats']);
@@ -75,8 +73,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/panier/nombre', [PanierController::class, 'nombreArticles'])->name('panier.nombre');
 });
 
+// // Routes d'administration - UNIQUEMENT pour les admins
+// Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->group(function () {
+//     // Gestion des produits
+//     Route::get('/produits', [AdminController::class, 'produits'])->name('admin.produits');
+//     Route::post('/produits', [AdminController::class, 'creerProduit'])->name('admin.produits.store');
+//     Route::put('/produits/{id}', [AdminController::class, 'modifierProduit'])->name('admin.produits.update');
+//     Route::delete('/produits/{id}', [AdminController::class, 'supprimerProduit'])->name('admin.produits.destroy');
+    
+//     // Gestion des utilisateurs
+//     Route::get('/utilisateurs', [AdminController::class, 'utilisateurs'])->name('admin.utilisateurs');
+//     Route::put('/utilisateurs/{id}/role', [AdminController::class, 'modifierRole'])->name('admin.utilisateurs.role');
+//     Route::delete('/utilisateurs/{id}', [AdminController::class, 'supprimerUtilisateur'])->name('admin.utilisateurs.destroy');
+// });
+
 // Routes d'administration - UNIQUEMENT pour les admins
-Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->group(function () {
+Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Gestion des produits
     Route::get('/produits', [AdminController::class, 'produits'])->name('admin.produits');
     Route::post('/produits', [AdminController::class, 'creerProduit'])->name('admin.produits.store');

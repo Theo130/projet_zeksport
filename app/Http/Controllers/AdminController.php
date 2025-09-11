@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
 use App\Models\Produit;
+use App\Models\Categorie;
+use App\Models\Subcategorie;
 
 class AdminController extends Controller
 {
@@ -14,10 +16,14 @@ class AdminController extends Controller
      */
     public function produits()
     {
-        $produits = Produit::all(); // Récupère tous les produits
-        
+        $produits = Produit::with(['categorie', 'subcategorie'])->get();
+        $categories = Categorie::all();
+        $subcategories = Subcategorie::all();
+
         return Inertia::render('Admin/Produits', [
-            'produits' => $produits
+            'produits' => $produits,
+            'categories' => $categories,
+            'subcategories' => $subcategories
         ]);
     }
 
@@ -26,17 +32,20 @@ class AdminController extends Controller
      */
     public function creerProduit(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nom' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
             'prix' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            // Ajouter d'autres validations selon tes besoins
+            'image_url' => 'nullable|url',
+            'id_categorie' => 'required|exists:categories,id',
+            'id_subcategorie' => 'nullable|exists:subcategories,id'
         ]);
 
-        Produit::create($request->all());
+        Produit::create($validated);
 
-        return redirect()->route('admin.produits')->with('success', 'Produit créé avec succès !');
+        return redirect()->route('admin.produits')
+                        ->with('success', 'Produit créé avec succès!');
     }
 
     /**
@@ -45,19 +54,21 @@ class AdminController extends Controller
     public function modifierProduit(Request $request, $id)
     {
         $produit = Produit::findOrFail($id);
-        
-        $request->validate([
+
+        $validated = $request->validate([
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
             'prix' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'image_url' => 'nullable|url',
-            'id_subcategorie' => 'required|exists:subcategories,id',
+            'id_categorie' => 'required|exists:categories,id',
+            'id_subcategorie' => 'nullable|exists:subcategories,id'
         ]);
 
-        $produit->update($request->all());
+        $produit->update($validated);
 
-        return redirect()->route('admin.produits')->with('success', 'Produit modifié avec succès !');
+        return redirect()->route('admin.produits')
+                        ->with('success', 'Produit modifié avec succès!');
     }
 
     /**
@@ -66,9 +77,12 @@ class AdminController extends Controller
     public function supprimerProduit($id)
     {
         $produit = Produit::findOrFail($id);
+        $nom = $produit->nom;
+        
         $produit->delete();
 
-        return redirect()->route('admin.produits')->with('success', 'Produit supprimé avec succès !');
+        return redirect()->route('admin.produits')
+                        ->with('success', "Produit \"$nom\" supprimé avec succès!");
     }
 
     /**
@@ -76,9 +90,9 @@ class AdminController extends Controller
      */
     public function utilisateurs()
     {
-        $utilisateurs = User::all(); // Récupère tous les utilisateurs
-        
-        return Inertia::render('Admin/Utilisateurs', [
+        $utilisateurs = User::all();
+
+        return Inertia::render('admin/Utilisateurs', [
             'utilisateurs' => $utilisateurs
         ]);
     }
@@ -90,13 +104,14 @@ class AdminController extends Controller
     {
         $user = User::findOrFail($id);
         
-        $request->validate([
-            'role' => 'required|in:client,admin'
+        $validated = $request->validate([
+            'role' => 'required|in:user,admin'
         ]);
 
-        $user->update(['role' => $request->role]);
+        $user->update($validated);
 
-        return redirect()->route('admin.utilisateurs')->with('success', 'Rôle modifié avec succès !');
+        return redirect()->route('admin.utilisateurs')
+                        ->with('success', 'Rôle modifié avec succès!');
     }
 
     /**
@@ -108,11 +123,14 @@ class AdminController extends Controller
         
         // Empêcher la suppression de son propre compte
         if ($user->id === auth()->id()) {
-            return redirect()->route('admin.utilisateurs')->with('error', 'Vous ne pouvez pas supprimer votre propre compte !');
+            return redirect()->route('admin.utilisateurs')
+                            ->with('error', 'Vous ne pouvez pas supprimer votre propre compte!');
         }
 
+        $nom = $user->name;
         $user->delete();
 
-        return redirect()->route('admin.utilisateurs')->with('success', 'Utilisateur supprimé avec succès !');
+        return redirect()->route('admin.utilisateurs')
+                        ->with('success', "Utilisateur \"$nom\" supprimé avec succès!");
     }
 }
