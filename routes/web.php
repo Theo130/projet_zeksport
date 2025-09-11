@@ -7,9 +7,11 @@ use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\RechercheController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PanierController;
+use App\Http\Controllers\AdminController; // 👈 AJOUTE CET IMPORT ICI
 
 // ===============================================
-// ROUTES EXISTANTES (conservées exactement comme tu les avais)
+// ROUTES EXISTANTES
 // ===============================================
 
 // Afficher resultat qd je recherche un truc
@@ -38,20 +40,12 @@ Route::middleware('guest')->group(function () {
         return redirect()->route('connexion');
     })->name('login');
     
-    // Page de connexion/inscription 
     Route::get('/connexion', [AuthController::class, 'showConnexion'])->name('connexion');
-    
     Route::get('/connexioninscription', function () {
         return redirect()->route('connexion');
     })->name('connexioninscription.jsx');
-    
-    // Page d'inscription 
     Route::get('/inscription', [AuthController::class, 'showInscription'])->name('inscription');
-    
-    // Traitement de l'inscription
-  Route::post('/inscription', [AuthController::class, 'inscription'])->name('inscription.store');
-    
-    // Traitement de la connexion
+    Route::post('/inscription', [AuthController::class, 'inscription'])->name('inscription.store');
     Route::post('/connexion', [AuthController::class, 'connexion'])->name('connexion.store');
 });
 
@@ -66,27 +60,31 @@ Route::middleware('auth')->group(function () {
             'user' => auth()->user()
         ]);
     })->name('dashboard');
+    
+    // 👇 AJOUTE CETTE ROUTE POUR LA MISE À JOUR DU PROFIL
+    Route::put('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
 });
-
-use App\Http\Controllers\PanierController;
 
 // Routes panier pour utilisateurs connectés
 Route::middleware('auth')->group(function () {
-    // Afficher le panier
     Route::get('/panier', [PanierController::class, 'index'])->name('panier.index');
-    
-    // Ajouter un produit au panier
     Route::post('/panier/ajouter', [PanierController::class, 'ajouter'])->name('panier.ajouter');
-    
-    // Supprimer un produit du panier
     Route::delete('/panier/supprimer', [PanierController::class, 'supprimer'])->name('panier.supprimer');
-    
-    // Modifier la quantité dun produit
     Route::patch('/panier/quantite', [PanierController::class, 'modifierQuantite'])->name('panier.quantite');
-    
-    // Vider le panier
     Route::delete('/panier/vider', [PanierController::class, 'vider'])->name('panier.vider');
-    
-    // API pour obtenir le nombre d'articles (pour la navbar)
     Route::get('/api/panier/nombre', [PanierController::class, 'nombreArticles'])->name('panier.nombre');
+});
+
+// Routes d'administration - UNIQUEMENT pour les admins
+Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->group(function () {
+    // Gestion des produits
+    Route::get('/produits', [AdminController::class, 'produits'])->name('admin.produits');
+    Route::post('/produits', [AdminController::class, 'creerProduit'])->name('admin.produits.store');
+    Route::put('/produits/{id}', [AdminController::class, 'modifierProduit'])->name('admin.produits.update');
+    Route::delete('/produits/{id}', [AdminController::class, 'supprimerProduit'])->name('admin.produits.destroy');
+    
+    // Gestion des utilisateurs
+    Route::get('/utilisateurs', [AdminController::class, 'utilisateurs'])->name('admin.utilisateurs');
+    Route::put('/utilisateurs/{id}/role', [AdminController::class, 'modifierRole'])->name('admin.utilisateurs.role');
+    Route::delete('/utilisateurs/{id}', [AdminController::class, 'supprimerUtilisateur'])->name('admin.utilisateurs.destroy');
 });

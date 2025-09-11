@@ -107,12 +107,25 @@ export default function Inscription() {
             {errors.telephone && <p className="text-sm text-red-500 mt-1">{errors.telephone}</p>}
           </div>
 
-          {/* ----- AJOUT : Champ Role (caché mais envoyé) ----- */}
-          <input
-            type="hidden"
-            name="role"
-            value={data.role}
-          />
+          {/* ----- NOUVEAU : Champ Role visible ----- */}
+          <div>
+            <label className="block font-medium mb-2 text-gray-700">Rôle *</label>
+            <select
+              value={data.role}
+              onChange={e => setData('role', e.target.value)}
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
+                errors.role ? 'border-red-500' : 'border-gray-300'
+              }`}
+              required
+            >
+              <option value="client">Client</option>
+              <option value="admin">Administrateur</option>
+            </select>
+            {errors.role && <p className="text-sm text-red-500 mt-1">{errors.role}</p>}
+            <p className="text-xs text-gray-500 mt-1">
+              Choisissez votre type de compte : Client pour acheter des produits, Administrateur pour gérer la plateforme.
+            </p>
+          </div>
          
           <div>
             <label className="block font-medium mb-2 text-gray-700">Mot de passe *</label>

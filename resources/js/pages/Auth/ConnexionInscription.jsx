@@ -41,6 +41,12 @@ export default function ConnexionInscription() {
               </div>
             )}
 
+            {/* INFO : Pas besoin de champ rôle pour la connexion */}
+            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 text-blue-700 rounded text-sm">
+              <strong>ℹ️ Information :</strong> Connectez-vous avec votre email et mot de passe. 
+              Votre rôle (Client/Admin) est automatiquement détecté.
+            </div>
+
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <input
@@ -89,6 +95,13 @@ export default function ConnexionInscription() {
               <a href="#" className="text-sm text-gray-700 hover:underline">
                 Mot de passe oublié ?
               </a>
+            </div>
+
+            {/* Comptes de test pour déboguer */}
+            <div className="mt-4 p-3 bg-gray-50 border rounded text-xs">
+              <strong>🔧 Mode développement :</strong>
+              <br />• Connectez-vous avec l'email d'un compte admin créé via l'inscription
+              <br />• Le rôle sera automatiquement reconnu après connexion
             </div>
           </div>
 
