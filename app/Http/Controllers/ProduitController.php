@@ -14,7 +14,7 @@ class ProduitController extends Controller
     public function show($id)
     {
         // Charger les relations pour avoir tout ce qu'il faut dans Detailproduit.jsx
-        $produit = Produit::with('categorie', 'souscategorie')->findOrFail($id);
+        $produit = Produit::with('categorie', 'subcategorie')->findOrFail($id);
 
         return Inertia::render('Produits/Detailproduit', [
             'produit' => $produit

@@ -107,7 +107,7 @@ export default function Inscription() {
             {errors.telephone && <p className="text-sm text-red-500 mt-1">{errors.telephone}</p>}
           </div>
 
-          {/* ----- NOUVEAU : Champ Role visible ----- */}
+          {/* ----- NOUVEAU : Champ Role visible -----
           <div>
             <label className="block font-medium mb-2 text-gray-700">Rôle *</label>
             <select
@@ -125,7 +125,7 @@ export default function Inscription() {
             <p className="text-xs text-gray-500 mt-1">
               Choisissez votre type de compte : Client pour acheter des produits, Administrateur pour gérer la plateforme.
             </p>
-          </div>
+          </div> */}
          
           <div>
             <label className="block font-medium mb-2 text-gray-700">Mot de passe *</label>

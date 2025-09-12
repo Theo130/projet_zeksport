@@ -119,8 +119,7 @@ export default function Navbar() {
         <button className="font-medium hover:text-gray-600">Homme</button>
         <button className="font-medium hover:text-gray-600">Femme</button>
         <button className="font-medium hover:text-gray-600">Enfant</button>
-        <button className="font-medium hover:text-gray-600">Sport</button>
-        <button className="font-medium hover:text-gray-600">Marques</button>
+        
       </nav>
     </header>
   );

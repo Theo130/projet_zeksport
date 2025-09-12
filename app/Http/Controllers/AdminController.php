@@ -42,6 +42,11 @@ class AdminController extends Controller
             'id_subcategorie' => 'nullable|exists:subcategories,id'
         ]);
 
+        // Gérer le cas où id_subcategorie est vide
+        if (empty($validated['id_subcategorie'])) {
+            $validated['id_subcategorie'] = null;
+        }
+
         Produit::create($validated);
 
         return redirect()->route('admin.produits')
@@ -64,6 +69,11 @@ class AdminController extends Controller
             'id_categorie' => 'required|exists:categories,id',
             'id_subcategorie' => 'nullable|exists:subcategories,id'
         ]);
+
+        // Gérer le cas où id_subcategorie est vide
+        if (empty($validated['id_subcategorie'])) {
+            $validated['id_subcategorie'] = null;
+        }
 
         $produit->update($validated);
 
@@ -92,7 +102,7 @@ class AdminController extends Controller
     {
         $utilisateurs = User::all();
 
-        return Inertia::render('admin/Utilisateurs', [
+        return Inertia::render('Admin/Utilisateurs', [  // Changé 'admin' en 'Admin'
             'utilisateurs' => $utilisateurs
         ]);
     }
@@ -104,8 +114,14 @@ class AdminController extends Controller
     {
         $user = User::findOrFail($id);
         
+        // Empêcher la modification de son propre rôle
+        if ($user->id === auth()->id()) {
+            return redirect()->route('admin.utilisateurs')
+                            ->with('error', 'Vous ne pouvez pas modifier votre propre rôle!');
+        }
+        
         $validated = $request->validate([
-            'role' => 'required|in:user,admin'
+            'role' => 'required|in:admin,client'  // Changé 'user' en 'client'
         ]);
 
         $user->update($validated);
@@ -127,7 +143,7 @@ class AdminController extends Controller
                             ->with('error', 'Vous ne pouvez pas supprimer votre propre compte!');
         }
 
-        $nom = $user->name;
+        $nom = $user->prenom . ' ' . $user->nom;  // Utilisé prenom + nom au lieu de name
         $user->delete();
 
         return redirect()->route('admin.utilisateurs')
