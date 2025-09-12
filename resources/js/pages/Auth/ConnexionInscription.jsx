@@ -96,13 +96,6 @@ export default function ConnexionInscription() {
                 Mot de passe oublié ?
               </a>
             </div>
-
-            {/* Comptes de test pour déboguer */}
-            <div className="mt-4 p-3 bg-gray-50 border rounded text-xs">
-              <strong>🔧 Mode développement :</strong>
-              <br />• Connectez-vous avec l'email d'un compte admin créé via l'inscription
-              <br />• Le rôle sera automatiquement reconnu après connexion
-            </div>
           </div>
 
           {/* --------- Bloc Inscription --------- */}

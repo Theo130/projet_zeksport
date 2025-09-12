@@ -95,8 +95,8 @@ export default function Home({ produitsRecents = [] }) {
                     <h1 className="text-2xl text-black font-bold">
                         Meilleures ventes
                     </h1>
-                   
-                
+
+
                 </div>
 
                 {/* Grille des produits */}
@@ -113,7 +113,7 @@ export default function Home({ produitsRecents = [] }) {
                                             src={
                                                 produit.image_url && produit.image_url.startsWith('http')
                                                     ? produit.image_url
-                                                    : produit.image_url 
+                                                    : produit.image_url
                                                         ? `/images/${produit.image_url}`
                                                         : '/images/placeholder.jpg'
                                             }
@@ -126,28 +126,27 @@ export default function Home({ produitsRecents = [] }) {
                                 </Link>
 
 
-                                 {/* Informations sur le stock */}
-                            <div className="mb-2">
-                                {produit.stock > 0 ? (
-                                    <p className="text-sm text-green-600">
-                                        En stock ({produit.stock} disponible{produit.stock > 1 ? 's' : ''})
-                                    </p>
-                                ) : (
-                                    <p className="text-sm text-red-600">Rupture de stock</p>
-                                )}
-                            </div>
+                                {/* Informations sur le stock */}
+                                <div className="mb-2">
+                                    {produit.stock > 0 ? (
+                                        <p className="text-sm text-green-600">
+                                            En stock ({produit.stock} disponible{produit.stock > 1 ? 's' : ''})
+                                        </p>
+                                    ) : (
+                                        <p className="text-sm text-red-600">Rupture de stock</p>
+                                    )}
+                                </div>
 
-                                <button 
+                                <button
                                     onClick={() => ajouterAuPanier(produit.id)}
                                     disabled={produit.stock === 0}
-                                    className={`w-full text-sm font-semibold px-4 py-2 rounded-md shadow transition duration-300 ${
-                                        produit.stock > 0 
-                                            ? 'bg-emerald-400 text-white hover:bg-black' 
+                                    className={`w-full text-sm font-semibold px-4 py-2 rounded-md shadow transition duration-300 ${produit.stock > 0
+                                            ? 'bg-emerald-400 text-white hover:bg-black'
                                             : 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                                    }`}
+                                        }`}
                                 >
-                                    {utilisateurConnecte ? 
-                                        (produit.stock > 0 ? 'Ajouter au panier' : 'Indisponible') 
+                                    {utilisateurConnecte ?
+                                        (produit.stock > 0 ? 'Ajouter au panier' : 'Indisponible')
                                         : 'Se connecter pour acheter'
                                     }
                                 </button>

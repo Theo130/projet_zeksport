@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\AdminController; 
+use App\Http\Controllers\AdminController2;
 
 
 
@@ -99,4 +100,12 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/utilisateurs', [AdminController::class, 'utilisateurs'])->name('admin.utilisateurs');
     Route::put('/utilisateurs/{id}/role', [AdminController::class, 'modifierRole'])->name('admin.utilisateurs.role');
     Route::delete('/utilisateurs/{id}', [AdminController::class, 'supprimerUtilisateur'])->name('admin.utilisateurs.destroy');
+});
+
+// Nouvelles routes pour les utilisateurs (à ajouter après les routes admin existantes)
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    // Routes utilisateurs avec AdminController2
+    Route::get('/utilisateurs', [AdminController2::class, 'index'])->name('admin2.utilisateurs');
+    Route::put('/utilisateurs/{id}/role', [AdminController2::class, 'changerRole'])->name('admin2.changer-role');
+    Route::delete('/utilisateurs/{id}', [AdminController2::class, 'supprimer'])->name('admin2.supprimer');
 });

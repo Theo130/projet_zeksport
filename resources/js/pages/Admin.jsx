@@ -6,7 +6,7 @@ export default function Admin() {
   return (
     <MainLayout>
       <Head title="Administration - ZEK Sport" />
-      
+
       <div className="max-w-4xl mx-auto p-6">
         {/* En-tête */}
         <div className="bg-white rounded-lg shadow p-6 mb-8">
@@ -19,10 +19,10 @@ export default function Admin() {
                 Gérez votre plateforme e-commerce
               </p>
             </div>
-            
+
             {/* Bouton retour dashboard */}
-            <Link 
-              href={route('dashboard')} 
+            <Link
+              href={route('dashboard')}
               className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition flex items-center gap-2"
             >
               ← Retour au dashboard
@@ -32,7 +32,7 @@ export default function Admin() {
 
         {/* Cards principales - 2 colonnes */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          
+
           {/* Gestion des produits */}
           <div className="bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
             <div className="p-8">
@@ -45,14 +45,14 @@ export default function Admin() {
               <p className="text-gray-600 text-center mb-8">
                 Ajoutez, modifiez et gérez tous vos produits, leurs prix, leur stock et leurs images
               </p>
-              
-              <Link 
-                href={route('admin.produits')} 
+
+              <Link
+                href={route('admin.produits')}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-lg transition duration-200 block text-center text-lg"
               >
                 Accéder aux produits
               </Link>
-              
+
               <div className="mt-6 text-center">
                 <div className="flex justify-center gap-4 text-sm text-gray-500">
                   <span>• Ajouter produits</span>
@@ -75,14 +75,13 @@ export default function Admin() {
               <p className="text-gray-600 text-center mb-8">
                 Consultez et gérez les comptes clients et administrateurs de la plateforme
               </p>
-              
-              <Link 
-                href={route('admin.utilisateurs')} 
+
+              <Link
+                href={route('admin2.utilisateurs')}  // Au lieu de admin.utilisateurs
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-4 rounded-lg transition duration-200 block text-center text-lg"
               >
                 Voir les utilisateurs
               </Link>
-              
               <div className="mt-6 text-center">
                 <div className="flex justify-center gap-4 text-sm text-gray-500">
                   <span>• Liste clients</span>
