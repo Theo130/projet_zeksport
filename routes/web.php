@@ -33,7 +33,7 @@ Route::get('/admin', function () {
     return Inertia::render('Admin');
 })->middleware(['auth'])->name('admin');
 
-// Routes d'authentification
+//Routes d'authentification
 Route::middleware('guest')->group(function () {
     Route::get('/login', function () {
         return redirect()->route('connexion');
@@ -48,19 +48,19 @@ Route::middleware('guest')->group(function () {
     Route::post('/connexion', [AuthController::class, 'connexion'])->name('connexion.store');
 });
 
-// Routes pour utilisateurs connectés
+//Routes pour utilisateurs connectés
 Route::middleware('auth')->group(function () {
-    // Déconnexion
+    //Déconnexion
     Route::post('/deconnexion', [AuthController::class, 'deconnexion'])->name('deconnexion');
     
-    // Dashboard
+    //Dashboard
     Route::get('/mon-compte', function () {
         return Inertia::render('Dashboard', [
             'user' => auth()->user()
         ]);
     })->name('dashboard');
     
-    // 👇 AJOUTE CETTE ROUTE POUR LA MISE À JOUR DU PROFIL
+    // ROUTE POUR LA MISE À JOUR DU PROFIL
     Route::put('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
 });
 
@@ -74,37 +74,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/api/panier/nombre', [PanierController::class, 'nombreArticles'])->name('panier.nombre');
 });
 
-// // Routes d'administration - UNIQUEMENT pour les admins
-// Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->prefix('admin')->group(function () {
-//     // Gestion des produits
-//     Route::get('/produits', [AdminController::class, 'produits'])->name('admin.produits');
-//     Route::post('/produits', [AdminController::class, 'creerProduit'])->name('admin.produits.store');
-//     Route::put('/produits/{id}', [AdminController::class, 'modifierProduit'])->name('admin.produits.update');
-//     Route::delete('/produits/{id}', [AdminController::class, 'supprimerProduit'])->name('admin.produits.destroy');
-    
-//     // Gestion des utilisateurs
-//     Route::get('/utilisateurs', [AdminController::class, 'utilisateurs'])->name('admin.utilisateurs');
-//     Route::put('/utilisateurs/{id}/role', [AdminController::class, 'modifierRole'])->name('admin.utilisateurs.role');
-//     Route::delete('/utilisateurs/{id}', [AdminController::class, 'supprimerUtilisateur'])->name('admin.utilisateurs.destroy');
-// });
 
-// Routes d'administration - UNIQUEMENT pour les admins
+
+
+
+// Routes d'administration pour les admins
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     // Gestion des produits
     Route::get('/produits', [AdminController::class, 'produits'])->name('admin.produits');
     Route::post('/produits', [AdminController::class, 'creerProduit'])->name('admin.produits.store');
     Route::put('/produits/{id}', [AdminController::class, 'modifierProduit'])->name('admin.produits.update');
     Route::delete('/produits/{id}', [AdminController::class, 'supprimerProduit'])->name('admin.produits.destroy');
-    
-    // Gestion des utilisateurs
-    Route::get('/utilisateurs', [AdminController::class, 'utilisateurs'])->name('admin.utilisateurs');
-    Route::put('/utilisateurs/{id}/role', [AdminController::class, 'modifierRole'])->name('admin.utilisateurs.role');
-    Route::delete('/utilisateurs/{id}', [AdminController::class, 'supprimerUtilisateur'])->name('admin.utilisateurs.destroy');
 });
-
-// Nouvelles routes pour les utilisateurs (à ajouter après les routes admin existantes)
+//route pr utilisateurs
 Route::middleware(['auth'])->prefix('admin')->group(function () {
-    // Routes utilisateurs avec AdminController2
+    // routes utilisateurs avc AdminController2
     Route::get('/utilisateurs', [AdminController2::class, 'index'])->name('admin2.utilisateurs');
     Route::put('/utilisateurs/{id}/role', [AdminController2::class, 'changerRole'])->name('admin2.changer-role');
     Route::delete('/utilisateurs/{id}', [AdminController2::class, 'supprimer'])->name('admin2.supprimer');
