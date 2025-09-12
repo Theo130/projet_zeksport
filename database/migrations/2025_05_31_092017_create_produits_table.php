@@ -21,12 +21,14 @@ class Produit extends Model
         'prix',
         'stock',
         'image_url',
-        'id_categorie', // ← CHANGÉ pour correspondre à la migration
+        'id_categorie',
+        'mise_en_avant',
     ];
 
     protected $casts = [
         'prix' => 'decimal:2',
         'stock' => 'integer',
+        'mise_en_avant' => 'boolean',
     ];
 
     // 🔍 Données à indexer dans Meilisearch

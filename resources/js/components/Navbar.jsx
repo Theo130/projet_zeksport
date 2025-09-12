@@ -115,11 +115,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      <nav className="bg-white flex justify-center gap-14 py-3 border-y border-gray-200">
-        <button className="font-medium hover:text-gray-600">Homme</button>
-        <button className="font-medium hover:text-gray-600">Femme</button>
-        <button className="font-medium hover:text-gray-600">Enfant</button>
-        
+      <nav className="bg-white flex justify-center gap-14 py-0.5 border-y border-gray-200">
       </nav>
     </header>
   );
