@@ -98,7 +98,7 @@ export default function AdminProduits({ produits = [], categories = [], subcateg
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-800 mb-2">
-                📦 Gestion des produits
+                Gestion des produits
               </h1>
               <p className="text-gray-600">
                 Ajoutez, modifiez et gérez tous vos produits
@@ -117,7 +117,7 @@ export default function AdminProduits({ produits = [], categories = [], subcateg
                 onClick={openAddModal}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
               >
-                ➕ Ajouter un produit
+                Ajouter un produit
               </button>
             </div>
           </div>
@@ -204,13 +204,13 @@ export default function AdminProduits({ produits = [], categories = [], subcateg
                             onClick={() => openEditModal(produit)}
                             className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition text-sm"
                           >
-                            ✏️ Modifier
+                           Modifier
                           </button>
                           <button
                             onClick={() => handleDelete(produit)}
                             className="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 transition text-sm"
                           >
-                            🗑️ Supprimer
+                           Supprimer
                           </button>
                         </div>
                       </td>

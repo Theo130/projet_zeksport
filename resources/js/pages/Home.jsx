@@ -44,49 +44,68 @@ export default function Home({ produitsRecents = [] }) {
             {/* le truc homme femme enfant */}
             <div className="flex flex-col md:flex-row justify-between gap-6 p-6 bg-white">
                 {/* Bloc HOMME */}
-                <div className="relative w-full md:w-1/3 h-[450px] bg-gray-400 rounded-md overflow-hidden">
-                    <div className="absolute inset-0 flex flex-col items-center justify-between py-8 px-4 text-white">
-                        <h2 className="text-3xl font-bold drop-shadow-md">HOMME</h2>
-                        <div className="flex flex-col gap-3 w-full">
-                            <Link href="/produits/homme/vetement">
-                                <button className="bg-white text-black font-medium py-2 rounded w-full">Vêtements</button>
-                            </Link>
-                            <Link href="/produits/homme/chaussure">
-                                <button className="bg-white text-black font-medium py-2 rounded w-full">Chaussures</button>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
+              <div
+  className="relative w-full md:w-1/3 h-[450px] rounded-md overflow-hidden bg-cover bg-center"
+  style={{ backgroundImage: "url('/images/imagehomme.jpg')" }}
+>
+  <div className="absolute inset-0 flex flex-col items-center justify-between py-8 px-4 text-white bg-black/30">
+    <h2 className="text-3xl font-bold drop-shadow-md">HOMME</h2>
+    <div className="flex flex-col gap-3 w-full">
+      <Link href="/produits/homme/vetement">
+        <button className="bg-white text-black font-medium py-2 rounded w-full">
+          Vêtements
+        </button>
+      </Link>
+      <Link href="/produits/homme/chaussure">
+        <button className="bg-white text-black font-medium py-2 rounded w-full">
+          Chaussures
+        </button>
+      </Link>
+    </div>
+  </div>
+</div>
 
-                {/* Bloc FEMME */}
-                <div className="relative w-full md:w-1/3 h-[450px] bg-gray-400 rounded-md overflow-hidden">
-                    <div className="absolute inset-0 flex flex-col items-center justify-between py-8 px-4 text-white">
-                        <h2 className="text-3xl font-bold drop-shadow-md">FEMME</h2>
-                        <div className="flex flex-col gap-3 w-full">
-                            <Link href="/produits/femme/vetement">
-                                <button className="bg-white text-black font-medium py-2 rounded w-full">Vêtements</button>
-                            </Link>
-                            <Link href="/produits/femme/chaussure">
-                                <button className="bg-white text-black font-medium py-2 rounded w-full">Chaussures</button>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
 
-                {/* Bloc ENFANT */}
-                <div className="relative w-full md:w-1/3 h-[450px] bg-gray-400 rounded-md overflow-hidden">
-                    <div className="absolute inset-0 flex flex-col items-center justify-between py-8 px-4 text-white">
-                        <h2 className="text-3xl font-bold drop-shadow-md">ENFANT</h2>
-                        <div className="flex flex-col gap-3 w-full">
-                            <Link href="/produits/enfant/vetement">
-                                <button className="bg-white text-black font-medium py-2 rounded w-full">Vêtements</button>
-                            </Link>
-                            <Link href="/produits/enfant/chaussure">
-                                <button className="bg-white text-black font-medium py-2 rounded w-full">Chaussures</button>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
+              {/* Bloc FEMME */}
+<div
+  className="relative w-full md:w-1/3 h-[450px] rounded-md overflow-hidden bg-cover bg-center"
+  style={{ backgroundImage: "url('/images/imagefemme.jpg')" }}
+>
+  <div className="absolute inset-0 flex flex-col items-center justify-between py-8 px-4 text-white bg-black/30">
+    <h2 className="text-3xl font-bold drop-shadow-md">FEMME</h2>
+    <div className="flex flex-col gap-3 w-full">
+      <Link href="/produits/femme/vetement">
+        <button className="bg-white text-black font-medium py-2 rounded w-full">Vêtements</button>
+      </Link>
+      <Link href="/produits/femme/chaussure">
+        <button className="bg-white text-black font-medium py-2 rounded w-full">Chaussures</button>
+      </Link>
+    </div>
+  </div>
+</div>
+
+             {/* Bloc ENFANT */}
+<div
+  className="relative w-full md:w-1/3 h-[450px] rounded-md overflow-hidden bg-cover bg-center"
+  style={{ backgroundImage: "url('/images/imageenfant.jpg')" }}
+>
+  <div className="absolute inset-0 flex flex-col items-center justify-between py-8 px-4 text-white bg-black/30">
+    <h2 className="text-3xl font-bold drop-shadow-md">ENFANT</h2>
+    <div className="flex flex-col gap-3 w-full">
+      <Link href="/produits/enfant/vetement">
+        <button className="bg-white text-black font-medium py-2 rounded w-full">
+          Vêtements
+        </button>
+      </Link>
+      <Link href="/produits/enfant/chaussure">
+        <button className="bg-white text-black font-medium py-2 rounded w-full">
+          Chaussures
+        </button>
+      </Link>
+    </div>
+  </div>
+</div>
+
             </div>
 
             {/* Section des produits récents */}

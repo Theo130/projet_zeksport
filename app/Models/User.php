@@ -72,7 +72,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Vérifier si l'utilisateur est admin
+     * verifier si l utilisateur est admin
      */
     public function isAdmin()
     {
@@ -80,7 +80,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Vérifier si l'utilisateur est client
+     * verifier si l utilisateur est client
      */
     public function isClient()
     {

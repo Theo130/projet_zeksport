@@ -34,7 +34,7 @@ class Panier extends Model
     }
 
     /**
-     * Relation many-to-many avec les produits (CORRIGÉE)
+     * Relation many-to-many avec les produits 
      */
     public function produits()
     {

@@ -31,20 +31,7 @@ class Produit extends Model
         'stock' => 'integer',
     ];
 
-    // Commenter temporairement toute la fonction Meilisearch
-    /*
-    public function toSearchableArray()
-    {
-        $this->loadMissing(['categorie', 'subcategorie']);
-
-        return [
-            'nom' => $this->nom,
-            'description' => $this->description,
-            'categorie' => $this->categorie ? $this->categorie->nom : null,
-            'subcategorie' => $this->subcategorie ? $this->subcategorie->nom : null,
-        ];
-    }
-    */
+   
 
     // Relations avec les catégories
     public function categorie()

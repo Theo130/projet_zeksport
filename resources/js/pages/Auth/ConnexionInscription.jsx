@@ -45,7 +45,7 @@ export default function ConnexionInscription() {
 
             {/* INFO : Pas besoin de champ rôle pour la connexion */}
             <div className="mb-4 p-3 bg-blue-50 border border-blue-200 text-blue-700 rounded text-sm">
-              <strong>ℹ️ Information :</strong> Connectez-vous avec votre email et mot de passe. 
+              <strong> Information :</strong> Connectez-vous avec votre email et mot de passe. 
               Votre rôle (Client/Admin) est automatiquement détecté.
             </div>
 
