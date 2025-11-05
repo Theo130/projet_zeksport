@@ -9,7 +9,7 @@ use App\Models\User;
 class AdminController2 extends Controller
 {
     /**
-     * Afficher la liste des utilisateurs
+     * afficher la liste des utilisateurs
      */
     public function index()
     {
@@ -21,13 +21,13 @@ class AdminController2 extends Controller
     }
 
     /**
-     * Changer le rôle d'un utilisateur
+     * Changer le role d'un utilisateur
      */
     public function changerRole(Request $request, $id)
     {
         $user = User::findOrFail($id);
         
-        // Empêcher la modification de son propre rôle
+        // Empecher la modification de son propre rôle
         if ($user->id === auth()->id()) {
             return redirect()->back()->with('error', 'Vous ne pouvez pas modifier votre propre rôle!');
         }
@@ -42,7 +42,7 @@ class AdminController2 extends Controller
     }
 
     /**
-     * Supprimer un utilisateur
+     * supprimer un utilisateur
      */
     public function supprimer($id)
     {

@@ -18,7 +18,7 @@ export default function Inscription() {
 
   const submit = (e) => {
     e.preventDefault();
-    
+
     post(route('inscription.store'), {
       onSuccess: () => {
         // Réinitialiser le formulaire en cas de succès
@@ -46,7 +46,7 @@ export default function Inscription() {
         )}
 
         <form onSubmit={submit} className="space-y-6">
-          
+
           {/* ----- Prénom ----- */}
           <div>
             <label className="block font-medium mb-2 text-gray-700">Prénom *</label>
@@ -54,9 +54,8 @@ export default function Inscription() {
               type="text"
               value={data.prenom}
               onChange={e => setData('prenom', e.target.value)}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                errors.prenom ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.prenom ? 'border-red-500' : 'border-gray-300'
+                }`}
               placeholder="Votre prénom"
               required
             />
@@ -70,9 +69,8 @@ export default function Inscription() {
               type="text"
               value={data.nom}
               onChange={e => setData('nom', e.target.value)}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                errors.nom ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.nom ? 'border-red-500' : 'border-gray-300'
+                }`}
               placeholder="Votre nom"
               required
             />
@@ -86,50 +84,31 @@ export default function Inscription() {
               type="email"
               value={data.email}
               onChange={e => setData('email', e.target.value)}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                errors.email ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.email ? 'border-red-500' : 'border-gray-300'
+                }`}
               placeholder="votre@email.com"
               required
             />
             {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
           </div>
 
-          {/* ----- Téléphone ----- */}
           <div>
             <label className="block font-medium mb-2 text-gray-700">Téléphone</label>
             <input
               type="tel"
               value={data.telephone}
               onChange={e => setData('telephone', e.target.value)}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                errors.telephone ? 'border-red-500' : 'border-gray-300'
-              }`}
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.telephone ? 'border-red-500' : 'border-gray-300'
+                }`}
               placeholder="06 12 34 56 78"
+              maxLength={10}
+              pattern="[0-9]*"
+              inputMode="numeric"
             />
             {errors.telephone && <p className="text-sm text-red-500 mt-1">{errors.telephone}</p>}
           </div>
 
-          {/* ----- NOUVEAU : Champ Role visible -----
-          <div>
-            <label className="block font-medium mb-2 text-gray-700">Rôle *</label>
-            <select
-              value={data.role}
-              onChange={e => setData('role', e.target.value)}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                errors.role ? 'border-red-500' : 'border-gray-300'
-              }`}
-              required
-            >
-              <option value="client">Client</option>
-              <option value="admin">Administrateur</option>
-            </select>
-            {errors.role && <p className="text-sm text-red-500 mt-1">{errors.role}</p>}
-            <p className="text-xs text-gray-500 mt-1">
-              Choisissez votre type de compte : Client pour acheter des produits, Administrateur pour gérer la plateforme.
-            </p>
-          </div> */}
-         
+
           <div>
             <label className="block font-medium mb-2 text-gray-700">Mot de passe *</label>
             <div className="relative">
@@ -137,9 +116,8 @@ export default function Inscription() {
                 type={showPassword ? "text" : "password"}
                 value={data.mot_de_passe}
                 onChange={e => setData('mot_de_passe', e.target.value)}
-                className={`w-full border rounded px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                  errors.mot_de_passe ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`w-full border rounded px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.mot_de_passe ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 placeholder="Minimum 8 caractères"
                 required
               />
@@ -173,9 +151,8 @@ export default function Inscription() {
                 type={showPasswordConfirmation ? "text" : "password"}
                 value={data.mot_de_passe_confirmation}
                 onChange={e => setData('mot_de_passe_confirmation', e.target.value)}
-                className={`w-full border rounded px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                  errors.mot_de_passe_confirmation ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`w-full border rounded px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.mot_de_passe_confirmation ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 placeholder="Répétez votre mot de passe"
                 required
               />
@@ -201,7 +178,6 @@ export default function Inscription() {
             )}
           </div>
 
-          {/* ----- Bouton ----- */}
           <button
             type="submit"
             disabled={processing}
@@ -211,7 +187,6 @@ export default function Inscription() {
           </button>
         </form>
 
-        {/* Lien retour vers connexion */}
         <div className="mt-6 text-center">
           <p className="text-gray-600">
             Vous avez déjà un compte ?{' '}

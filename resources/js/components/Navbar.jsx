@@ -4,7 +4,7 @@ import { Link, usePage, router } from '@inertiajs/react';
 
 export default function Navbar() {
   const { auth } = usePage().props;
-  const utilisateurConnecté = !!auth?.user; // Vérifie si l'utilisateur est connecté
+  const utilisateurConnecté = !!auth?.user; // ca verifie si l'utilisateur est connecté
 
   const [recherche, setRecherche] = useState('');
   const [resultats, setResultats] = useState([]);

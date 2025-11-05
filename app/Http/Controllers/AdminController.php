@@ -12,7 +12,7 @@ use App\Models\Subcategorie;
 class AdminController extends Controller
 {
     /**
-     * Afficher la page de gestion des produits
+     * afficher la page de gestion des produits
      */
     public function produits()
     {
@@ -28,7 +28,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Créer un nouveau produit
+     * creer un nouveau produit
      */
     public function creerProduit(Request $request)
     {
@@ -42,7 +42,7 @@ class AdminController extends Controller
             'id_subcategorie' => 'nullable|exists:subcategories,id'
         ]);
 
-        // Gérer le cas où id_subcategorie est vide
+        // gerer le cas où id_subcategorie est vide
         if (empty($validated['id_subcategorie'])) {
             $validated['id_subcategorie'] = null;
         }
@@ -54,35 +54,35 @@ class AdminController extends Controller
     }
 
     /**
-     * Modifier un produit existant
+     * modifier un produit existant
      */
-    public function modifierProduit(Request $request, $id)
+     public function modifierProduit(Request $request, $id)
     {
-        $produit = Produit::findOrFail($id);
+    $produit = Produit::findOrFail($id);
 
-        $validated = $request->validate([
+    $validated = $request->validate(
+        [
             'nom' => 'required|string|max:255',
             'description' => 'nullable|string',
             'prix' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'image_url' => 'nullable|url',
+            'image_url' => 'nullable|string',
             'id_categorie' => 'required|exists:categories,id',
-            'id_subcategorie' => 'nullable|exists:subcategories,id'
-        ]);
+            'id_subcategorie' => 'required|exists:subcategories,id',
+        ],
+        [
+            'id_subcategorie.required' => 'Tu as oublié de sélectionner la sous-catégorie.',
+            'id_subcategorie.exists'   => 'La sous-catégorie choisie est invalide.',
+        ]
+    );
 
-        // Gérer le cas où id_subcategorie est vide
-        if (empty($validated['id_subcategorie'])) {
-            $validated['id_subcategorie'] = null;
-        }
+    $produit->update($validated);
 
-        $produit->update($validated);
-
-        return redirect()->route('admin.produits')
-                        ->with('success', 'Produit modifié avec succès!');
+    return back()->with('success', 'Produit mis à jour.');
     }
 
     /**
-     * Supprimer un produit
+     * supprimer un produit
      */
     public function supprimerProduit($id)
     {
@@ -95,58 +95,5 @@ class AdminController extends Controller
                         ->with('success', "Produit \"$nom\" supprimé avec succès!");
     }
 
-    /**
-     * Afficher la page de gestion des utilisateurs
-     */
-    public function utilisateurs()
-    {
-        $utilisateurs = User::all();
-
-        return Inertia::render('Admin/Utilisateurs', [  // Changé 'admin' en 'Admin'
-            'utilisateurs' => $utilisateurs
-        ]);
-    }
-
-    /**
-     * Modifier le rôle d'un utilisateur
-     */
-    public function modifierRole(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-        
-        // Empêcher la modification de son propre rôle
-        if ($user->id === auth()->id()) {
-            return redirect()->route('admin.utilisateurs')
-                            ->with('error', 'Vous ne pouvez pas modifier votre propre rôle!');
-        }
-        
-        $validated = $request->validate([
-            'role' => 'required|in:admin,client'  // Changé 'user' en 'client'
-        ]);
-
-        $user->update($validated);
-
-        return redirect()->route('admin.utilisateurs')
-                        ->with('success', 'Rôle modifié avec succès!');
-    }
-
-    /**
-     * Supprimer un utilisateur
-     */
-    public function supprimerUtilisateur($id)
-    {
-        $user = User::findOrFail($id);
-        
-        // Empêcher la suppression de son propre compte
-        if ($user->id === auth()->id()) {
-            return redirect()->route('admin.utilisateurs')
-                            ->with('error', 'Vous ne pouvez pas supprimer votre propre compte!');
-        }
-
-        $nom = $user->prenom . ' ' . $user->nom;  // Utilisé prenom + nom au lieu de name
-        $user->delete();
-
-        return redirect()->route('admin.utilisateurs')
-                        ->with('success', "Utilisateur \"$nom\" supprimé avec succès!");
-    }
+  
 }

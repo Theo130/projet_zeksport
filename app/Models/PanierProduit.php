@@ -16,8 +16,6 @@ class PanierProduit extends Model
         'id_produit',
         'quantite',
     ];
-
-    // IMPORTANT : Désactiver les timestamps car la table n'en a pas
     public $timestamps = false;
 
     /**

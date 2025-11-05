@@ -8,7 +8,6 @@ use Inertia\Inertia;
 
 class RechercheController extends Controller
 {
-    // 🔍 Recherche live (instantanée, début du mot)
     public function index(Request $request)
     {
         $query = $request->input('q');
@@ -21,12 +20,10 @@ class RechercheController extends Controller
         return response()->json($resultats);
     }
 
-    // 🔍 Recherche complète (quand on appuie sur Entrée)
     public function resultats(Request $request)
     {
         $query = $request->input('q');
 
-        // ✅ Recherche classique avec LIKE au lieu de Meilisearch
         $produits = Produit::with('categorie', 'subcategorie')
             ->where('nom', 'LIKE', "%{$query}%")
             ->orWhere('description', 'LIKE', "%{$query}%")

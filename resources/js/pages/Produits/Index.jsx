@@ -8,7 +8,7 @@ export default function Index({ categorie, souscategorie, produits }) {
 
     const ajouterAuPanier = (produitId) => {
         if (!utilisateurConnecte) {
-            // Rediriger vers la connexion si pas connecté
+            // rediriger vers la connexion si pas connecté
             router.visit(route('connexion'));
             return;
         }
@@ -19,19 +19,12 @@ export default function Index({ categorie, souscategorie, produits }) {
         }, {
             preserveState: true,
             preserveScroll: true,
-            onSuccess: () => {
-                // Optionnel : vous pouvez ajouter une notification de succès ici
-            },
-            onError: (errors) => {
-                console.error('Erreur lors de l\'ajout au panier:', errors);
-            }
         });
     };
 
     return (
         <MainLayout>
             <div className="p-6 bg-white">
-
                 <Link
                     href="/"
                     className="inline-block mb-6 px-5 py-2 bg-emerald-400 text-white text-sm font-semibold rounded-md shadow hover:bg-black transition duration-300"
@@ -57,7 +50,7 @@ export default function Index({ categorie, souscategorie, produits }) {
                                                 ? produit.image_url
                                                 : produit.image_url 
                                                     ? `/images/${produit.image_url}`
-                                                    : '/images/placeholder.jpg' // Image par défaut
+                                                    : '/images/placeholder.jpg' // image par défaut
                                         }
                                         alt={produit.nom}
                                         className="max-h-full max-w-full object-contain transition-transform duration-300 ease-in-out group-hover:scale-105"
@@ -67,7 +60,7 @@ export default function Index({ categorie, souscategorie, produits }) {
                                 <p className="font-bold text-black">{produit.prix} €</p>
                             </Link>
 
-                            {/* Informations sur le stock */}
+                            {/* informations sur le stock */}
                             <div className="mb-2">
                                 {produit.stock > 0 ? (
                                     <p className="text-sm text-green-600">

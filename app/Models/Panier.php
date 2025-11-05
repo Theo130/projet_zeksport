@@ -40,7 +40,7 @@ class Panier extends Model
     {
         return $this->belongsToMany(Produit::class, 'panier_produit', 'id_panier', 'id_produit')
                     ->withPivot('quantite');
-                    // Retiré ->withTimestamps() car la table n'a pas ces colonnes
+                    
     }
 
     /**

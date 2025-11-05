@@ -32,18 +32,16 @@ export default function ConnexionInscription() {
       <div className="bg-white py-12 px-4 md:px-16">
         <div className="flex flex-col md:flex-row justify-center items-start gap-8 mb-8">
           
-          {/* --------- Bloc Connexion --------- */}
           <div className="w-full md:w-1/2 bg-white p-6 border rounded">
             <h2 className="text-xl font-semibold mb-4 text-black">Connexion</h2>
 
-            {/* Affichage des erreurs générales */}
+            {/* affichage des erreurs */}
             {errors.general && (
               <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
                 {errors.general}
               </div>
             )}
 
-            {/* INFO : Pas besoin de champ rôle pour la connexion */}
             <div className="mb-4 p-3 bg-blue-50 border border-blue-200 text-blue-700 rounded text-sm">
               <strong> Information :</strong> Connectez-vous avec votre email et mot de passe. 
               Votre rôle (Client/Admin) est automatiquement détecté.
@@ -118,7 +116,7 @@ export default function ConnexionInscription() {
             </div>
           </div>
 
-          {/* --------- Bloc Inscription --------- */}
+      
           <div className="w-full md:w-1/2 bg-white p-6 border rounded text-center">
             <h2 className="text-xl font-semibold mb-4 text-black">
               Nouveau client de ZEK Sport ?

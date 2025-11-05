@@ -7,7 +7,7 @@ export default function Dashboard() {
   const user = auth?.user;
   const [modeEdition, setModeEdition] = useState(false);
 
-  // Formulaire pour la modification du profil
+  // formulaire pr la modification du profil
   const { data, setData, put, processing, errors, reset } = useForm({
     prenom: user?.prenom || '',
     nom: user?.nom || '',
@@ -22,22 +22,20 @@ export default function Dashboard() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     put(route('profile.update'), {
       preserveScroll: true,
       onSuccess: () => {
         setModeEdition(false);
-        // Les données seront automatiquement mises à jour via Inertia
       },
       onError: () => {
-        // Les erreurs sont gérées automatiquement via le formulaire
       }
     });
   };
 
   const annulerModification = () => {
     setModeEdition(false);
-    // Remettre les valeurs d'origine
+    // remet les valeurs dorigine
     reset();
     setData({
       prenom: user?.prenom || '',
@@ -50,7 +48,7 @@ export default function Dashboard() {
   return (
     <MainLayout>
       <Head title="Dashboard - ZEK Sport" />
-      
+
       <div className="max-w-4xl mx-auto p-6">
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex justify-between items-center mb-6">
@@ -64,7 +62,7 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* Messages de succès/erreur */}
+          {/* messages de succes/erreur */}
           {flash?.success && (
             <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
               {flash.success}
@@ -76,7 +74,7 @@ export default function Dashboard() {
               {flash.error}
             </div>
           )}
-          
+
           {user && (
             <div className="mb-8">
               <div className="flex justify-between items-center mb-4">
@@ -88,7 +86,7 @@ export default function Dashboard() {
                     onClick={() => setModeEdition(true)}
                     className="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition text-sm"
                   >
-                    ✏️ Modifier
+                    Modifier
                   </button>
                 ) : (
                   <div className="flex gap-2">
@@ -126,11 +124,11 @@ export default function Dashboard() {
                       <p className="text-sm font-medium text-gray-600 mb-1">Rôle</p>
                       <p className="text-gray-900 capitalize">{user.role}</p>
                     </div>
-                    
+
                   </div>
                 </div>
               ) : (
-                // Mode édition
+                // mode edition
                 <form onSubmit={handleSubmit} className="bg-gray-50 p-6 rounded-lg">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -141,9 +139,8 @@ export default function Dashboard() {
                         type="text"
                         value={data.prenom}
                         onChange={e => setData('prenom', e.target.value)}
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                          errors.prenom ? 'border-red-500' : 'border-gray-300'
-                        }`}
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.prenom ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         required
                       />
                       {errors.prenom && (
@@ -159,9 +156,8 @@ export default function Dashboard() {
                         type="text"
                         value={data.nom}
                         onChange={e => setData('nom', e.target.value)}
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                          errors.nom ? 'border-red-500' : 'border-gray-300'
-                        }`}
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.nom ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         required
                       />
                       {errors.nom && (
@@ -177,9 +173,8 @@ export default function Dashboard() {
                         type="email"
                         value={data.email}
                         onChange={e => setData('email', e.target.value)}
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                          errors.email ? 'border-red-500' : 'border-gray-300'
-                        }`}
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.email ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         required
                       />
                       {errors.email && (
@@ -195,15 +190,18 @@ export default function Dashboard() {
                         type="tel"
                         value={data.telephone}
                         onChange={e => setData('telephone', e.target.value)}
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
-                          errors.telephone ? 'border-red-500' : 'border-gray-300'
-                        }`}
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.telephone ? 'border-red-500' : 'border-gray-300'
+                          }`}
                         placeholder="06 12 34 56 78"
+                        maxLength={10}
+                        pattern="[0-9]*"
+                        inputMode="numeric"
                       />
                       {errors.telephone && (
                         <p className="text-sm text-red-500 mt-1">{errors.telephone}</p>
                       )}
                     </div>
+
                   </div>
 
                   <div className="mt-6 flex justify-end">
@@ -212,7 +210,7 @@ export default function Dashboard() {
                       disabled={processing}
                       className="px-6 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {processing ? 'Enregistrement...' : '💾 Enregistrer les modifications'}
+                      {processing ? 'Enregistrement...' : 'Enregistrer les modifications'}
                     </button>
                   </div>
                 </form>
@@ -220,65 +218,47 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* Actions rapides */}
           <div className="border-t pt-6">
             <h3 className="text-lg font-medium text-gray-800 mb-4">Actions rapides</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <a
                 href={route('panier.index')}
-                className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+                className="flex items-center p-4 border bg-emerald-100 rounded-lg hover:bg-gray-50 transition"
               >
-                <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center mr-3">
-                  🛒
-                </div>
                 <div>
                   <p className="font-medium">Mon panier</p>
                   <p className="text-sm text-gray-500">Voir mes articles</p>
                 </div>
               </a>
 
-              
-
-{user?.role === 'admin' ? (
-  <button
-    onClick={() => {
-      console.log('Clic sur admin button'); // Pour déboguer
-      router.get('/admin'); // Utilisez .get() au lieu de .visit()
-    }}
-    className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-red-50 transition text-left w-full"
-  >
-    <div className="w-10 h-10 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mr-3">
-      ⚙️
-    </div>
-    <div>
-      <p className="font-medium">Administration</p>
-      <p className="text-sm text-gray-500">Gérer la plateforme</p>
-    </div>
-  </button>
-) : (
-  <a
-                  href="/"
-                  className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+              {user?.role === 'admin' ? (
+                <button
+                  onClick={() => {
+                    router.get('/admin');
+                  }}
+                  className="flex items-center p-4 border  rounded-lg hover:bg-red-50  bg-red-100 transition text-left w-full"
                 >
-                  <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center mr-3">
-                    🛍️
+                  <div>
+                    <p className="font-medium">Administration</p>
+                    <p className="text-sm text-gray-500">Gérer la plateforme</p>
                   </div>
+                </button>
+              ) : (
+                <a
+                  href="/"
+                  className="flex items-center p-4 border bg-blue-100 rounded-lg hover:bg-gray-50 transition"
+                >
                   <div>
                     <p className="font-medium">Continuer les achats</p>
                     <p className="text-sm text-gray-500">Découvrir nos produits</p>
                   </div>
                 </a>
-)}
-                
-           
+              )}
 
               <button
                 onClick={handleLogout}
-                className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-red-50 transition text-left w-full"
+                className="flex items-center p-4 border bg-red-100 rounded-lg hover:bg-red-50 transition text-left w-full"
               >
-                <div className="w-10 h-10 bg-red-100 text-red-600 rounded-lg flex items-center justify-center mr-3">
-                  🚪
-                </div>
                 <div>
                   <p className="font-medium">Se déconnecter</p>
                   <p className="text-sm text-gray-500">Quitter mon compte</p>

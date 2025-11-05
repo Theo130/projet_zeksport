@@ -13,13 +13,13 @@ class Subcategorie extends Model
 
     protected $fillable = ['nom', 'id_categorie'];
 
-    // une souscatégorie appartient a une categorie
+    // une souscategorie appartient a une categorie
     public function categorie()
     {
         return $this->belongsTo(Categorie::class, 'id_categorie');
     }
 
-    // une souscatégorie a plusieurs produits
+    // une souscategorie a plusieurs produits
     public function produits()
     {
         return $this->hasMany(Produit::class, 'id_subcategorie');

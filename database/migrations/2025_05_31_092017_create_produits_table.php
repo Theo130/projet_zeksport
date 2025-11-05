@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+   
     public function up(): void
     {
         Schema::create('produits', function (Blueprint $table) {
@@ -19,7 +17,7 @@ return new class extends Migration
             $table->integer('stock');
             $table->string('image_url')->nullable();
             $table->foreignId('id_categorie')->constrained('categories');
-            $table->timestamps(); // ← AJOUTEZ CETTE LIGNE
+            $table->timestamps(); 
         });
     }
 

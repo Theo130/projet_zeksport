@@ -13,7 +13,7 @@ class ProduitController extends Controller
     // Afficher un produit individuel
     public function show($id)
     {
-        // Charger les relations pour avoir tout ce qu'il faut dans Detailproduit.jsx
+       
         $produit = Produit::with('categorie', 'subcategorie')->findOrFail($id);
 
         return Inertia::render('Produits/Detailproduit', [
@@ -21,21 +21,21 @@ class ProduitController extends Controller
         ]);
     }
 
-    // Afficher tous les produits d'une catégorie/souscat
+    // Afficher tous les produits d'une categorie/souscat
     public function index($categorie, $souscategorie)
     {
-        // Trouver la catégorie correspondante
+       
         $cat = Categorie::where('nom', $categorie)->firstOrFail();
 
-        // Trouver la sous-catégorie liée à cette catégorie
+        // Trouver la sous-categorie liée à cette categorie
         $subcat = Subcategorie::where('nom', $souscategorie)
                     ->where('id_categorie', $cat->id)
                     ->firstOrFail();
 
-        // Récupérer les produits de cette sous-catégorie
+        // Recuperer les produits de cette sous-categorie
         $produits = $subcat->produits;
 
-        // Envoyer les données à la vue React
+        // Envoyer les donnees a React
         return Inertia::render('Produits/Index', [
             'categorie' => $categorie,
             'souscategorie' => $souscategorie,
