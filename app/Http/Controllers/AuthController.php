@@ -133,4 +133,29 @@ class AuthController extends Controller
         // Redirection vers l'accueil
         return redirect()->route('home')->with('success', 'Déconnexion réussie.');
     }
+
+    /**
+     * Mettre à jour le profil utilisateur
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+        
+        $validated = $request->validate([
+            'prenom' => ['required', 'string', 'max:50'],
+            'nom' => ['required', 'string', 'max:50'], 
+            'email' => ['required', 'email', 'unique:utilisateurs,email,' . $user->id],
+            'telephone' => ['nullable', 'string', 'max:20'],
+        ], [
+            'prenom.required' => 'Le prénom est obligatoire.',
+            'nom.required' => 'Le nom est obligatoire.',
+            'email.required' => 'L\'adresse e-mail est obligatoire.',
+            'email.email' => 'L\'adresse e-mail doit être valide.',
+            'email.unique' => 'Cette adresse e-mail est déjà utilisée.',
+        ]);
+        
+        $user->update($validated);
+        
+        return redirect()->back()->with('success', 'Profil mis à jour avec succès !');
+    }
 }

@@ -9,13 +9,13 @@ use Inertia\Inertia;
 class HomeController extends Controller
 {
     /**
-     * Afficher la page d'accueil
+     * afficher la page d'accueil
      */
     public function index()
     {
-        // Récupérer les produits mis en avant pour "Meilleures ventes"
+        // recup les produits mis en avant pour meilleures ventes
         $produitsRecents = Produit::with('categorie', 'subcategorie')
-            ->where('mise_en_avant', true) // Seulement les produits mis en avant
+            ->where('mise_en_avant', true) 
             ->orderBy('id', 'desc')
             ->take(8)
             ->get();

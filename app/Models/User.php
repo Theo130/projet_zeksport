@@ -11,18 +11,12 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * Le nom de la table dans la base de données
-     */
     protected $table = 'utilisateurs';
 
-    /**
-     * Désactiver les timestamps automatiques car on a seulement date_creation
-     */
     public $timestamps = false;
 
     /**
-     * Les attributs qui sont assignables en masse.
+     * Les attributs
      */
     protected $fillable = [
         'nom',
@@ -34,7 +28,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Les attributs qui doivent être cachés pour la sérialisation.
+     * Les attributs qui doivent être cachés pour la sérialisation
      */
     protected $hidden = [
         'mot_de_passe',
@@ -72,7 +66,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Vérifier si l'utilisateur est admin
+     * verifier si l utilisateur est admin
      */
     public function isAdmin()
     {
@@ -80,7 +74,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Vérifier si l'utilisateur est client
+     * verifier si l utilisateur est client
      */
     public function isClient()
     {

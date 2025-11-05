@@ -4,7 +4,7 @@ import { Link, usePage, router } from '@inertiajs/react';
 
 export default function Navbar() {
   const { auth } = usePage().props;
-  const utilisateurConnecté = !!auth?.user; // Vérifie si l'utilisateur est connecté
+  const utilisateurConnecté = !!auth?.user; // ca verifie si l'utilisateur est connecté
 
   const [recherche, setRecherche] = useState('');
   const [resultats, setResultats] = useState([]);
@@ -115,12 +115,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      <nav className="bg-white flex justify-center gap-14 py-3 border-y border-gray-200">
-        <button className="font-medium hover:text-gray-600">Homme</button>
-        <button className="font-medium hover:text-gray-600">Femme</button>
-        <button className="font-medium hover:text-gray-600">Enfant</button>
-        <button className="font-medium hover:text-gray-600">Sport</button>
-        <button className="font-medium hover:text-gray-600">Marques</button>
+      <nav className="bg-white flex justify-center gap-14 py-0.5 border-y border-gray-200">
       </nav>
     </header>
   );

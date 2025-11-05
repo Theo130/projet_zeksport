@@ -4,16 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-// use Laravel\Scout\Searchable; // ← COMMENTÉ pour désactiver Meilisearch
+
 
 class Produit extends Model
 {
-    use HasFactory; // ← Retirer Searchable
-    // use Searchable; // ← COMMENTÉ
-
+    use HasFactory; 
+    
     protected $table = 'produits';
     
-    // Désactiver les timestamps car votre table n'en a pas
+    // j'ai desactivé pcq ma table na pas cette colone
     public $timestamps = false;
 
     protected $fillable = [
@@ -31,21 +30,7 @@ class Produit extends Model
         'stock' => 'integer',
     ];
 
-    // Commenter temporairement toute la fonction Meilisearch
-    /*
-    public function toSearchableArray()
-    {
-        $this->loadMissing(['categorie', 'subcategorie']);
-
-        return [
-            'nom' => $this->nom,
-            'description' => $this->description,
-            'categorie' => $this->categorie ? $this->categorie->nom : null,
-            'subcategorie' => $this->subcategorie ? $this->subcategorie->nom : null,
-        ];
-    }
-    */
-
+   
     // Relations avec les catégories
     public function categorie()
     {
@@ -57,7 +42,6 @@ class Produit extends Model
         return $this->belongsTo(Subcategorie::class, 'id_subcategorie');
     }
 
-    // ===== RELATIONS POUR LE PANIER =====
 
     /**
      * Relation many-to-many avec les paniers

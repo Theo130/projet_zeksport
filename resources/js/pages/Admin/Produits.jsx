@@ -38,22 +38,20 @@ export default function AdminProduits({ produits = [], categories = [], subcateg
       id_categorie: produit.id_categorie,
       id_subcategorie: produit.id_subcategorie
     });
-    
+
     // Filtrer les sous-catégories selon la catégorie sélectionnée
     if (produit.id_categorie) {
       const filtered = subcategories.filter(sub => sub.id_categorie == produit.id_categorie);
       setFilteredSubcategories(filtered);
     }
-    
+
     setShowModal(true);
   };
 
   // Gérer le changement de catégorie
   const handleCategoryChange = (categoryId) => {
     setData('id_categorie', categoryId);
-    setData('id_subcategorie', ''); // Reset subcategory
-    
-    // Filtrer les sous-catégories
+    setData('id_subcategorie', ''); // reset sous-catégorie
     const filtered = subcategories.filter(sub => sub.id_categorie == categoryId);
     setFilteredSubcategories(filtered);
   };
@@ -61,7 +59,13 @@ export default function AdminProduits({ produits = [], categories = [], subcateg
   // Soumettre le formulaire
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
+    // Petit contrôle rapide avant envoi
+    if (!data.id_subcategorie) {
+      alert("Tu as oublié de sélectionner la sous-catégorie !");
+      return;
+    }
+
     if (editingProduct) {
       // Modification
       put(route('admin.produits.update', editingProduct.id), {
@@ -91,33 +95,33 @@ export default function AdminProduits({ produits = [], categories = [], subcateg
   return (
     <MainLayout>
       <Head title="Gestion des produits - Admin" />
-      
+
       <div className="max-w-7xl mx-auto p-6">
         {/* En-tête */}
         <div className="bg-white rounded-lg shadow p-6 mb-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-800 mb-2">
-                📦 Gestion des produits
+                Gestion des produits
               </h1>
               <p className="text-gray-600">
                 Ajoutez, modifiez et gérez tous vos produits
               </p>
             </div>
-            
+
             <div className="flex gap-4">
-              <Link 
-                href={route('admin')} 
+              <Link
+                href={route('admin')}
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
               >
                 ← Retour admin
               </Link>
-              
+
               <button
                 onClick={openAddModal}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
               >
-                ➕ Ajouter un produit
+                Ajouter un produit
               </button>
             </div>
           </div>
@@ -130,7 +134,7 @@ export default function AdminProduits({ produits = [], categories = [], subcateg
               Liste des produits ({produits.length})
             </h2>
           </div>
-          
+
           {produits.length === 0 ? (
             <div className="p-8 text-center text-gray-500">
               <p className="text-lg mb-4">Aucun produit trouvé</p>
@@ -159,8 +163,8 @@ export default function AdminProduits({ produits = [], categories = [], subcateg
                     <tr key={produit.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
                         {produit.image_url ? (
-                          <img 
-                            src={produit.image_url} 
+                          <img
+                            src={produit.image_url}
                             alt={produit.nom}
                             className="w-16 h-16 object-cover rounded-lg"
                           />
@@ -181,10 +185,10 @@ export default function AdminProduits({ produits = [], categories = [], subcateg
                       </td>
                       <td className="px-6 py-4">
                         <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
-                          produit.stock > 10 
-                            ? 'bg-green-100 text-green-800' 
-                            : produit.stock > 0 
-                            ? 'bg-yellow-100 text-yellow-800' 
+                          produit.stock > 10
+                            ? 'bg-green-100 text-green-800'
+                            : produit.stock > 0
+                            ? 'bg-yellow-100 text-yellow-800'
                             : 'bg-red-100 text-red-800'
                         }`}>
                           {produit.stock} en stock
@@ -204,13 +208,13 @@ export default function AdminProduits({ produits = [], categories = [], subcateg
                             onClick={() => openEditModal(produit)}
                             className="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition text-sm"
                           >
-                            ✏️ Modifier
+                            Modifier
                           </button>
                           <button
                             onClick={() => handleDelete(produit)}
                             className="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 transition text-sm"
                           >
-                            🗑️ Supprimer
+                            Supprimer
                           </button>
                         </div>
                       </td>
@@ -239,6 +243,13 @@ export default function AdminProduits({ produits = [], categories = [], subcateg
                   ✕
                 </button>
               </div>
+
+              {/* 🚨 Message d’erreur global pour la sous-catégorie */}
+              {errors.id_subcategorie && (
+                <div className="mb-4 rounded-lg border border-red-300 bg-red-50 p-3 text-red-800">
+                  {errors.id_subcategorie}
+                </div>
+              )}
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Nom */}
@@ -345,13 +356,14 @@ export default function AdminProduits({ produits = [], categories = [], subcateg
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Sous-catégorie
+                      Sous-catégorie *
                     </label>
                     <select
                       value={data.id_subcategorie}
                       onChange={e => setData('id_subcategorie', e.target.value)}
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       disabled={!data.id_categorie}
+                      required
                     >
                       <option value="">Sélectionner une sous-catégorie</option>
                       {filteredSubcategories.map(subcat => (
@@ -387,3 +399,4 @@ export default function AdminProduits({ produits = [], categories = [], subcateg
     </MainLayout>
   );
 }
+ 

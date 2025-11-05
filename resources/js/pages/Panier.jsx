@@ -18,13 +18,13 @@ export default function Panier({ produits, total, nombreArticles }) {
   const modifierQuantite = (produitId, nouvelleQuantite) => {
     if (nouvelleQuantite < 1 || nouvelleQuantite > 10) return;
 
-    // Mettre à jour localement pour un feedback immédiat
+    // mettre à jour localement pour un feedback immédiat
     setQuantitesLocales(prev => ({
       ...prev,
       [produitId]: nouvelleQuantite
     }));
 
-    // Envoyer la mise à jour au serveur
+    // envoie la mise à jour au serveur
     router.patch(route('panier.quantite'), {
       produit_id: produitId,
       quantite: nouvelleQuantite
@@ -32,7 +32,7 @@ export default function Panier({ produits, total, nombreArticles }) {
       preserveState: true,
       preserveScroll: true,
       onSuccess: () => {
-        // Réinitialiser la quantité locale en cas de succès
+        // reinitialiser la quantité locale en cas de succès
         setQuantitesLocales(prev => {
           const newState = { ...prev };
           delete newState[produitId];
@@ -40,7 +40,7 @@ export default function Panier({ produits, total, nombreArticles }) {
         });
       },
       onError: () => {
-        // Réinitialiser la quantité locale en cas d'erreur
+        // reinitialiser la quantité locale en cas d'erreur
         setQuantitesLocales(prev => {
           const newState = { ...prev };
           delete newState[produitId];
@@ -80,12 +80,9 @@ export default function Panier({ produits, total, nombreArticles }) {
         </div>
 
         {produits.length === 0 ? (
-          // Panier vide
+          // panier vide
           <div className="text-center py-12">
             <div className="text-gray-400 mb-4">
-              <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 7H19M7 13v8a2 2 0 002 2h6a2 2 0 002-2v-8m-8 0V9a2 2 0 012-2h4a2 2 0 012 2v4.01" />
-              </svg>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">Votre panier est vide</h3>
             <p className="text-gray-500 mb-6">Découvrez nos produits et ajoutez-en à votre panier !</p>
@@ -97,9 +94,9 @@ export default function Panier({ produits, total, nombreArticles }) {
             </a>
           </div>
         ) : (
-          // Panier avec produits
+          // panier avec produits
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Liste des produits */}
+            {/* liste des produits */}
             <div className="flex-1 flex flex-col gap-4">
               {produits.map((produit) => (
                 <div key={produit.id} className="flex items-center border rounded p-4 gap-4 bg-white shadow-sm">
@@ -121,7 +118,7 @@ export default function Panier({ produits, total, nombreArticles }) {
                       {produit.prix} € × {getQuantiteAffichee(produit)} = {(produit.prix * getQuantiteAffichee(produit)).toFixed(2)} €
                     </p>
                     
-                    {/* Contrôles de quantité */}
+                    {/* controles de quantité */}
                     <div className="flex items-center gap-2 mt-2">
                       <button
                         onClick={() => modifierQuantite(produit.id, getQuantiteAffichee(produit) - 1)}
@@ -141,7 +138,6 @@ export default function Panier({ produits, total, nombreArticles }) {
                         +
                       </button>
                     </div>
-                    
                     <p className="text-xs text-gray-500 mt-1">
                       Stock disponible : {produit.stock}
                     </p>
@@ -156,7 +152,7 @@ export default function Panier({ produits, total, nombreArticles }) {
               ))}
             </div>
 
-            {/* Résumé paiement */}
+            {/* Resume */}
             <div className="w-full lg:w-[300px] border rounded p-4 h-fit">
               <h3 className="text-lg font-semibold mb-4">Récapitulatif</h3>
               

@@ -8,12 +8,11 @@ use Inertia\Inertia;
 
 class RechercheController extends Controller
 {
-    // 🔍 Recherche live (instantanée, début du mot)
     public function index(Request $request)
     {
         $query = $request->input('q');
 
-        $resultats = Produit::with('categorie', 'souscategorie')
+        $resultats = Produit::with('categorie', 'subcategorie')
             ->where('nom', 'like', $query . '%') // commence par
             ->limit(10)
             ->get();
@@ -21,13 +20,20 @@ class RechercheController extends Controller
         return response()->json($resultats);
     }
 
-    // 🔍 Recherche complète avec Meilisearch (intelligente)
     public function resultats(Request $request)
     {
         $query = $request->input('q');
 
-        // ✅ Utilisation de Meilisearch via Laravel Scout
-        $produits = Produit::search($query)->get();
+        $produits = Produit::with('categorie', 'subcategorie')
+            ->where('nom', 'LIKE', "%{$query}%")
+            ->orWhere('description', 'LIKE', "%{$query}%")
+            ->orWhereHas('categorie', function($q) use ($query) {
+                $q->where('nom', 'LIKE', "%{$query}%");
+            })
+            ->orWhereHas('subcategorie', function($q) use ($query) {
+                $q->where('nom', 'LIKE', "%{$query}%");
+            })
+            ->get();
 
         return Inertia::render('Recherche/Resultats', [
             'produits' => $produits,

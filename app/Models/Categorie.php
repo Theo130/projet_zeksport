@@ -13,7 +13,7 @@ class Categorie extends Model
 
     protected $fillable = ['nom'];
 
-    // Une catégorie a plusieurs sous-catégories
+    // une catégorie a plusieurs souscatégories
     public function subcategories()
     {
         return $this->hasMany(Subcategorie::class, 'id_categorie');

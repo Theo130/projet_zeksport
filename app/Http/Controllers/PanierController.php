@@ -12,17 +12,17 @@ use Inertia\Inertia;
 class PanierController extends Controller
 {
     /**
-     * Afficher le panier de l'utilisateur
+     * afficher le panier de l'utilisateur
      */
     public function index()
     {
         $user = Auth::user();
         $panier = $user->obtenirPanier();
         
-        // Charger les produits avec leurs données complètes (CORRIGÉ)
+        // Charger les produits avec leurs donnees completes
         $produitsPanier = $panier->produits()->get();
         
-        // Calculer le total
+        // calcule le total
         $total = $panier->getTotal();
         $nombreArticles = $panier->getNombreArticles();
 
@@ -33,9 +33,6 @@ class PanierController extends Controller
         ]);
     }
 
-    /**
-     * Ajouter un produit au panier
-     */
     public function ajouter(Request $request)
     {
         $request->validate([
@@ -47,7 +44,7 @@ class PanierController extends Controller
         $produit = Produit::findOrFail($request->produit_id);
         $quantite = $request->quantite ?? 1;
 
-        // Vérifier le stock
+        // Verifier le stock
         if (!$produit->estEnStock($quantite)) {
             return back()->withErrors([
                 'stock' => 'Stock insuffisant pour ce produit.'
@@ -57,13 +54,13 @@ class PanierController extends Controller
         // Obtenir ou créer le panier
         $panier = $user->obtenirPanier();
 
-        // Vérifier si le produit est déjà dans le panier
+        // Verifier si le produit est déjà dans le panier
         $existant = PanierProduit::where('id_panier', $panier->id)
                                   ->where('id_produit', $produit->id)
                                   ->first();
 
         if ($existant) {
-            // Augmenter la quantité
+            // augmenter la quantité
             $nouvelleQuantite = $existant->quantite + $quantite;
             
             if (!$produit->estEnStock($nouvelleQuantite)) {
@@ -86,7 +83,7 @@ class PanierController extends Controller
     }
 
     /**
-     * Supprimer un produit du panier
+     * supprimer un produit du panier
      */
     public function supprimer(Request $request)
     {
@@ -101,7 +98,7 @@ class PanierController extends Controller
             return back()->withErrors(['error' => 'Panier introuvable.']);
         }
 
-        // Supprimer le produit du panier
+        // supprimer le produit du panier
         PanierProduit::where('id_panier', $panier->id)
                      ->where('id_produit', $request->produit_id)
                      ->delete();
@@ -110,7 +107,7 @@ class PanierController extends Controller
     }
 
     /**
-     * Modifier la quantité d'un produit dans le panier
+     * modif la quantite dun produit dans le panier
      */
     public function modifierQuantite(Request $request)
     {
@@ -127,14 +124,14 @@ class PanierController extends Controller
             return back()->withErrors(['error' => 'Panier introuvable.']);
         }
 
-        // Vérifier le stock
+        // Verifier le stock
         if (!$produit->estEnStock($request->quantite)) {
             return back()->withErrors([
                 'stock' => 'Stock insuffisant pour cette quantité.'
             ]);
         }
 
-        // Mettre à jour la quantité
+        // mettre à jour la quantité
         PanierProduit::where('id_panier', $panier->id)
                      ->where('id_produit', $request->produit_id)
                      ->update(['quantite' => $request->quantite]);
@@ -155,21 +152,5 @@ class PanierController extends Controller
         }
 
         return back()->with('success', 'Panier vidé avec succès.');
-    }
-
-    /**
-     * Obtenir le nombre d'articles dans le panier (pour la navbar)
-     */
-    public function nombreArticles()
-    {
-        $user = Auth::user();
-        
-        if (!$user || !$user->panier) {
-            return response()->json(['nombre' => 0]);
-        }
-
-        $nombre = $user->panier->getNombreArticles();
-        
-        return response()->json(['nombre' => $nombre]);
     }
 }

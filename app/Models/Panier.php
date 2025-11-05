@@ -34,13 +34,13 @@ class Panier extends Model
     }
 
     /**
-     * Relation many-to-many avec les produits (CORRIGÉE)
+     * Relation many-to-many avec les produits 
      */
     public function produits()
     {
         return $this->belongsToMany(Produit::class, 'panier_produit', 'id_panier', 'id_produit')
                     ->withPivot('quantite');
-                    // Retiré ->withTimestamps() car la table n'a pas ces colonnes
+                    
     }
 
     /**
